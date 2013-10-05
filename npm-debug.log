@@ -1,0 +1,19 @@
+43632 error Error: ENOENT, lstat '/home/jason/tmp/npm-32669-WzT9v3Fi/1380987897532-0.9554507113061845/package/jquery/src/sizzle/speed/template.html'
+43633 error If you need help, you may report this log at:
+43633 error     <http://github.com/isaacs/npm/issues>
+43633 error or email it to:
+43633 error     <npm-@googlegroups.com>
+43634 error System Linux 3.8.0-31-generic
+43635 error command "/usr/bin/node" "/usr/bin/npm" "install"
+43636 error cwd /home/jason/apps/todoTDD
+43637 error node -v v0.10.20
+43638 error npm -v 1.3.11
+43639 error path /home/jason/tmp/npm-32669-WzT9v3Fi/1380987897532-0.9554507113061845/package/jquery/src/sizzle/speed/template.html
+43640 error fstream_path /home/jason/tmp/npm-32669-WzT9v3Fi/1380987897532-0.9554507113061845/package/jquery/src/sizzle/speed/template.html
+43641 error fstream_type File
+43642 error fstream_class FileWriter
+43643 error code ENOENT
+43644 error errno 34
+43645 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/writer.js:284:26
+43645 error fstream_stack Object.oncomplete (fs.js:107:15)
+43646 verbose exit [ 34, true ]
