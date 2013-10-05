@@ -11,7 +11,11 @@ define([
   var AppView = Backbone.View.extend({
     template: JST['app/scripts/templates/app.ejs'],
 
-    el: '#todoapp'
+    el: '#todoapp',
+
+    render: function() {
+      return this;
+    }
   });
 
   return AppView;
