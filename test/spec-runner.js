@@ -9,8 +9,9 @@ require.config({
     backbone:   '/components/backbone/backbone',
 
     // test components
-    jasmine:     '/components/jasmine/lib/jasmine-core/jasmine',
-    jasmineHtml: '/components/jasmine/lib/jasmine-core/jasmine-html',
+    jasmine:       '/components/jasmine/lib/jasmine-core/jasmine',
+    jasmineHtml:   '/components/jasmine/lib/jasmine-core/jasmine-html',
+    jasmineJquery: '/components/jasmine-jquery/lib/jasmine-jquery',
 
     templates: '/templates/templates',
     spec: '../spec'
@@ -53,6 +54,8 @@ require([
   };
  
   var specs = [];
+ 
+  specs.push('spec/views/app-view-spec');
  
   $(function(){
     require(specs, function(){
