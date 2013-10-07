@@ -1,0 +1,10 @@
+Story 1 - see interface
+Story 2 - enter a new todo
+Story 3 - restore todos
+Story 4 - mark a todo as completed
+Story 5 - delete a todo
+Story 6 - edit a todo
+Story 7 - toggle completed for all todos
+Story 8 - see footer with items left
+Story 9 - filter todos according to completion status
+Story 10 - clear all completed todos
