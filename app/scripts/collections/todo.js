@@ -1,15 +1,18 @@
 /*global define*/
 
 define([
-    'underscore',
-    'backbone',
-    'models/todo'
+  'underscore',
+  'backbone',
+  'models/todo'
 ], function (_, Backbone, TodoModel) {
-    'use strict';
+  'use strict';
 
-    var TodoCollection = Backbone.Collection.extend({
-        model: TodoModel
-    });
+  var TodoCollection = Backbone.Collection.extend({
+    model: TodoModel,
 
-    return TodoCollection;
+    addTodo: function() {
+    }
+  });
+
+  return TodoCollection;
 });

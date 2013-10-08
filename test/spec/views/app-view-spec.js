@@ -1,4 +1,4 @@
-/* global define, describe, it, expect, beforeEach, afterEach */
+/* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
   'jquery',
@@ -8,7 +8,7 @@ define([
   'models/todo',
   'collections/todo',
   'jasmineJquery'
-], function($, _, Backbone, App, TodoModel, TodoCollection) {
+], function($, _, Backbone, App, Todo, TodoCollection) {
   'use strict';
  
   $.fn.pressKeys = function(string) {
@@ -27,9 +27,12 @@ define([
     };
     _.each(string, function(char) {
       var e = $.Event('keypress');
-      e.which = keys[char];
+      e.which   = keys[char];
       e.keyCode = keys[char];
       this.trigger(e);
+      if (e.which !== 13) {
+        this.val(this.val() + char);
+      }
     }, this);
   };
 
@@ -64,32 +67,55 @@ define([
     });
 
     describe('Entering a new todo, followed by <Enter>', function() {
-
-      var app = new App();
-      app.render();
-
-      var numberOfTodos = app.collection.length;
       var todoText = 'get some milk';
+      var app;
 
-      it('should not already contain "' + todoText + '"', function() {
-        expect(app.collection.pluck('title')).not.toContain(todoText);
+      beforeEach(function() {
+        app = new App();
+        app.render();
+
+        spyOn(app.collection, 'addTodo');
       });
 
-      // enter the text, followed by enter
-      $('input#new-todo').val(todoText);
-
-      // press enter
-      $('input#new-todo').pressKeys(todoText + '\n');
-
-      it('should create a new todo in the todos collection', function() {
-        expect(app.collection.length).toBe(numberOfTodos + 1);
-        expect(
-          app.collection.at(app.collection.length - 1) instanceof TodoModel)
-            .toBeTruthy();
+      afterEach(function() {
+        app.remove();
+        $('body').append('<section id="todoapp"></section>');
       });
 
-      app.remove();
-      $('body').append('<section id="todoapp"></section>');
+      describe('with text "' + todoText + '"', function() {
+        beforeEach(function() {
+          $('input#new-todo').pressKeys(todoText + '\n');
+        });
+
+        it('should call collection.addTodo (once)', function() {
+          expect(app.collection.addTodo).toHaveBeenCalled();
+          expect(app.collection.addTodo.calls.length).toBe(1);
+        });
+
+        it('should call collection.addTodo with', function() {
+          expect(app.collection.addTodo).toHaveBeenCalledWith(todoText);
+        });
+      });
+
+      describe('with text ""', function() {
+        beforeEach(function() {
+          $('input#new-todo').pressKeys('   \n');
+        });
+
+        it('should not call collection.addTodo', function() {
+          expect(app.collection.addTodo).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('with text "   "', function() {
+        beforeEach(function() {
+          $('input#new-todo').pressKeys('   \n');
+        });
+
+        it('should not call collection.addTodo', function() {
+          expect(app.collection.addTodo).not.toHaveBeenCalled();
+        });
+      });
     });
   });
 

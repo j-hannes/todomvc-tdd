@@ -29,8 +29,11 @@ define([
     },
 
     createOnEnter: function(e) {
-      if (e.which === 13) {
-        this.collection.add(new Todo());
+      if (e.which === 13 ) {
+        var inputVal = this.$('#new-todo').val().trim();
+        if (inputVal) {
+          this.collection.addTodo(inputVal);
+        }
       }
     }
   });
