@@ -2,14 +2,37 @@
 
 define([
   'jquery',
+  'underscore',
   'backbone',
   'views/app',
   'models/todo',
   'collections/todo',
   'jasmineJquery'
-], function($, Backbone, App, TodoModel, TodoCollection) {
+], function($, _, Backbone, App, TodoModel, TodoCollection) {
   'use strict';
  
+  $.fn.pressKeys = function(string) {
+    var keys = {
+      '\n': 13,
+      ' ': 32,
+      'e': 69,
+      'g': 71,
+      'i': 73,
+      'k': 75,
+      'l': 76,
+      'm': 77,
+      'o': 79,
+      's': 83,
+      't': 84
+    };
+    _.each(string, function(char) {
+      var e = $.Event('keypress');
+      e.which = keys[char];
+      e.keyCode = keys[char];
+      this.trigger(e);
+    }, this);
+  };
+
   describe('View :: App', function() {
     describe('render()', function() {
       beforeEach(function() {
@@ -41,6 +64,7 @@ define([
     });
 
     describe('Entering a new todo, followed by <Enter>', function() {
+
       var app = new App();
       app.render();
 
@@ -51,14 +75,11 @@ define([
         expect(app.collection.pluck('title')).not.toContain(todoText);
       });
 
-      // enter the text
+      // enter the text, followed by enter
       $('input#new-todo').val(todoText);
 
       // press enter
-      var e = $.Event('keypress');
-      e.which = 13;
-      e.keyCode = 13;
-      $('input#new-todo').trigger(e);
+      $('input#new-todo').pressKeys(todoText + '\n');
 
       it('should create a new todo in the todos collection', function() {
         expect(app.collection.length).toBe(numberOfTodos + 1);
@@ -71,5 +92,6 @@ define([
       $('body').append('<section id="todoapp"></section>');
     });
   });
+
  
 });
