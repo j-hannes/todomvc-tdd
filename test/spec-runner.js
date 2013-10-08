@@ -56,7 +56,8 @@ require([
   var specs = [];
  
   specs.push('spec/views/app-view-spec');
- 
+  specs.push('spec/collections/todo-collection-spec');
+
   $(function(){
     require(specs, function(){
       jasmineEnv.execute();
