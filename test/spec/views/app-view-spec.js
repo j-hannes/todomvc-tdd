@@ -2,9 +2,10 @@
 
 define([
   'jquery',
+  'backbone',
   'views/app',
   'jasmineJquery'
-], function($, App) {
+], function($, Backbone, App) {
   'use strict';
  
   describe('View :: App', function() {
@@ -27,6 +28,13 @@ define([
         expect($('#todoapp')).toContain('header#header');
         expect($('#todoapp')).toContain('section#main');
         expect($('#todoapp')).toContain('footer#footer');
+      });
+    });
+
+    describe('initialization', function() {
+      it('attaches a todo collection', function() {
+        var app = new App();
+        expect(app.collection instanceof Backbone.Collection).toBeTruthy();
       });
     });
   });
