@@ -4,9 +4,10 @@ define([
   'jquery',
   'backbone',
   'views/app',
+  'models/todo',
   'collections/todo',
   'jasmineJquery'
-], function($, Backbone, App, TodoCollection) {
+], function($, Backbone, App, TodoModel, TodoCollection) {
   'use strict';
  
   describe('View :: App', function() {
@@ -37,6 +38,37 @@ define([
         var app = new App();
         expect(app.collection instanceof TodoCollection).toBeTruthy();
       });
+    });
+
+    describe('Entering a new todo, followed by <Enter>', function() {
+      var app = new App();
+      app.render();
+
+      var numberOfTodos = app.collection.length;
+      var todoText = 'get some milk';
+
+      it('should not already contain "' + todoText + '"', function() {
+        expect(app.collection.pluck('title')).not.toContain(todoText);
+      });
+
+      // enter the text
+      $('input#new-todo').val(todoText);
+
+      // press enter
+      var e = $.Event('keypress');
+      e.which = 13;
+      e.keyCode = 13;
+      $('input#new-todo').trigger(e);
+
+      it('should create a new todo in the todos collection', function() {
+        expect(app.collection.length).toBe(numberOfTodos + 1);
+        expect(
+          app.collection.at(app.collection.length - 1) instanceof TodoModel)
+            .toBeTruthy();
+      });
+
+      app.remove();
+      $('body').append('<section id="todoapp"></section>');
     });
   });
  
