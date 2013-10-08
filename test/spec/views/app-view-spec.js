@@ -4,8 +4,9 @@ define([
   'jquery',
   'backbone',
   'views/app',
+  'collections/todo',
   'jasmineJquery'
-], function($, Backbone, App) {
+], function($, Backbone, App, TodoCollection) {
   'use strict';
  
   describe('View :: App', function() {
@@ -34,7 +35,7 @@ define([
     describe('initialization', function() {
       it('attaches a todo collection', function() {
         var app = new App();
-        expect(app.collection instanceof Backbone.Collection).toBeTruthy();
+        expect(app.collection instanceof TodoCollection).toBeTruthy();
       });
     });
   });
