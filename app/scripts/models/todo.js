@@ -1,15 +1,17 @@
 /*global define*/
 
 define([
-    'underscore',
-    'backbone'
+  'underscore',
+  'backbone'
 ], function (_, Backbone) {
-    'use strict';
+  'use strict';
 
-    var TodoModel = Backbone.Model.extend({
-        defaults: {
-        }
-    });
+  var TodoModel = Backbone.Model.extend({
+    defaults: {
+      title: '',
+      completed: false
+    }
+  });
 
-    return TodoModel;
+  return TodoModel;
 });

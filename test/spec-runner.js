@@ -56,6 +56,7 @@ require([
   var specs = [];
  
   specs.push('spec/views/app-view-spec');
+  specs.push('spec/models/todo-model-spec');
   specs.push('spec/collections/todo-collection-spec');
 
   $(function(){
