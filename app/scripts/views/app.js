@@ -28,8 +28,10 @@ define([
       return this;
     },
 
-    createOnEnter: function() {
-      this.collection.add(new Todo());
+    createOnEnter: function(e) {
+      if (e.which === 13) {
+        this.collection.add(new Todo());
+      }
     }
   });
 
