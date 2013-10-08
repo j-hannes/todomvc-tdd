@@ -1,4 +1,4 @@
-Story 1 - see interface
+[OK] Story 1 - see interface
 Story 2 - enter a new todo
 Story 3 - restore todos
 Story 4 - mark a todo as completed
