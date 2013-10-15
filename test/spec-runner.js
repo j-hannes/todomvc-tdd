@@ -14,8 +14,8 @@ require.config({
 
     templates: '/templates/templates',
     spec: '../spec'
-
   },
+  
   shim: {
     underscore: {
       exports: '_'
@@ -53,6 +53,7 @@ require([
   };
  
   var specs = [];
+  specs.push('spec/dummy-spec');
  
   $(function(){
     require(specs, function(){
