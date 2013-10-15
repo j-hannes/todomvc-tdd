@@ -1,7 +1,7 @@
 /* global define, describe, it, expect */
 
 define([
-  'router/todo-app',
+  'routers/todo-app',
   'jasmineJquery'
 ], function(TodoApp) {
   'use strict';
