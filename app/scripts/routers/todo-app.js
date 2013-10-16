@@ -1,8 +1,9 @@
 /* global define */
 
 define([
+  'jquery',
   'views/app-view'
-], function(AppView) {
+], function($, AppView) {
   'use strict';
 
   var TodoApp = function() {
