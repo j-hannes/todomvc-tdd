@@ -9,13 +9,15 @@ require.config({
     backbone:   '/components/backbone/backbone',
 
     // test components
-    jasmine:     '/components/jasmine/lib/jasmine-core/jasmine',
-    jasmineHtml: '/components/jasmine/lib/jasmine-core/jasmine-html',
+    jasmine:       '/components/jasmine/lib/jasmine-core/jasmine',
+    jasmineHtml:   '/components/jasmine/lib/jasmine-core/jasmine-html',
+    jasmineJquery: '/components/jasmine-jquery/lib/jasmine-jquery',
 
     templates: '/templates/templates',
+    features: '../features',
     spec: '../spec'
   },
-  
+
   shim: {
     underscore: {
       exports: '_'
@@ -40,25 +42,31 @@ require([
   'jasmineHtml'
 ], function(_, $, jasmine){
   'use strict';
- 
+
   var jasmineEnv = jasmine.getEnv();
   jasmineEnv.updateInterval = 1000;
- 
+
   var htmlReporter = new jasmine.HtmlReporter();
- 
+
   jasmineEnv.addReporter(htmlReporter);
- 
+
   jasmineEnv.specFilter = function(spec) {
     return htmlReporter.specFilter(spec);
   };
- 
+
   var specs = [];
-  specs.push('spec/dummy-spec');
- 
+
+  // features
+  specs.push('features/01-user-interface');
+
+  // specs
+  // specs.push('spec/views/app-view');
+  // specs.push('spec/routers/todo-app');
+
   $(function(){
     require(specs, function(){
       jasmineEnv.execute();
     });
   });
- 
+
 });
