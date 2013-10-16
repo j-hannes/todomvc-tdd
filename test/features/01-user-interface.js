@@ -1,9 +1,10 @@
 /* global define, describe, it, expect, beforeEach, afterEach */
 
 define([
+  'jquery',
   'routers/todo-app',
   'jasmineJquery'
-], function(TodoApp) {
+], function($, TodoApp) {
   'use strict';
 
   describe('Given I have opened a browser', function() {
