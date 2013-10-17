@@ -48,7 +48,20 @@ define([
         describe('with a text other than white space in the input field for ' +
                  'new todos', function() {
           it('calls "create" on the todos collection', function() {
-            var e = {which: '13'};
+            // preparation
+            var view     = new AppView(),
+                eMock    = {which: '13'},
+                todoText = 'something';
+
+            view.render();
+            view.$('#new-todo').val(todoText);
+            spyOn(view.collection, 'createTodo');
+
+            // execution
+            view.createOnEnter(eMock);
+
+            // check
+            expect(view.collection.createTodo).toHaveBeenCalledWith(todoText);
           });
 
           it('empties the input field', function() {

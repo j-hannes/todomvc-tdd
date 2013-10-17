@@ -60,8 +60,9 @@ require([
   // specs.push('features/01-user-interface');
 
   // specs
-  specs.push('spec/views/app-view');
+  specs.push('spec/collections/todo-collection');
   specs.push('spec/routers/todo-app');
+  specs.push('spec/views/app-view');
 
   $(function(){
     require(specs, function(){
