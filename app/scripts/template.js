@@ -160,7 +160,6 @@ app.AppView = Backbone.View.extend({
 });
 
 
-
 // ###### Todo Model ######
 
 app.Todo = Backbone.Model.extend({
@@ -235,6 +234,7 @@ app.TodoView = Backbone.View.extend({
     }
   }
 });
+
 
 // ###### Todo Collection ######
 
