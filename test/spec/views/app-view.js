@@ -1,4 +1,4 @@
-/* global define, describe, it, expect, beforeEach, afterEach */
+/* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
   'views/app-view',
@@ -26,6 +26,52 @@ define([
 
       it('returns the view element', function() {
         expect(this.view.render()).toBe(this.view.el);
+      });
+    });
+
+    describe('keypress #new-todo', function() {
+      it('calls createOnEnter', function() {
+        var view = new AppView();
+        view.render();
+        spyOn(view, 'createOnEnter');
+        // events must be rebound after creating the spy
+        view.delegateEvents();
+
+        view.$('#new-todo').trigger('keypress');
+
+        expect(view.createOnEnter).toHaveBeenCalled();
+      });
+    });
+
+    describe ('createOnEnter', function() {
+      describe('with the <Enter> key pressed', function() {
+        describe('with a text other than white space in the input field for ' +
+                 'new todos', function() {
+          it('calls "create" on the todos collection', function() {
+            var e = {which: '13'};
+          });
+
+          it('empties the input field', function() {
+
+          });
+        });
+
+        describe('with nothing or only whitespace in the input field',
+                 function() {
+          it('does not call "create on the todos collection', function() {
+
+          });
+
+          it('does not empty the input field', function() {
+
+          });
+        });
+      });
+
+      describe('with any alphanumeric key pressed', function() {
+        it('adds that char or digit to the input field', function() {
+
+        });
       });
     });
   });

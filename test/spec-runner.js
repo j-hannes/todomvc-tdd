@@ -57,11 +57,11 @@ require([
   var specs = [];
 
   // features
-  specs.push('features/01-user-interface');
+  // specs.push('features/01-user-interface');
 
   // specs
-  // specs.push('spec/views/app-view');
-  // specs.push('spec/routers/todo-app');
+  specs.push('spec/views/app-view');
+  specs.push('spec/routers/todo-app');
 
   $(function(){
     require(specs, function(){
