@@ -2,8 +2,9 @@
 
 define([
   'backbone',
+  'models/todo-model',
   'templates'
-], function(Backbone, JST) {
+], function(Backbone, Todo, JST) {
   'use strict';
 
   var AppView = Backbone.View.extend({
@@ -18,10 +19,11 @@ define([
       return this.el;
     },
 
-    createOnEnter: function() {
+    createOnEnter: function(e) {
       var $input = this.$('#new-todo');
-      if ($input.val().trim()) {
-        this.collection.createTodo($input.val());
+      if (e.which === 13 && $input.val().trim()) {
+        var todo = new Todo({title: $input.val()});
+        this.collection.add(todo);
         $input.val('');
       }
     }

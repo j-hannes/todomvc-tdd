@@ -2,8 +2,10 @@
 
 define([
   'views/app-view',
+  'models/todo-model',
+  'collections/todo-collection',
   'jasmineJquery'
-], function(AppView) {
+], function(AppView, Todo, TodoCollection) {
   'use strict';
 
   describe('View :: App', function() {
@@ -43,76 +45,74 @@ define([
       });
     });
 
-    describe ('createOnEnter', function() {
-      describe('with the <Enter> key pressed', function() {
+    describe('createOnEnter', function() {
+      beforeEach(function() {
+        var todoCollection = new TodoCollection();
+        this.view = new AppView({collection: todoCollection});
+        this.view.render();
+        spyOn(todoCollection, 'add');
+      });
 
+      describe('with the <Enter> key pressed', function() {
         beforeEach(function() {
-          // preparation
-          var collectionMock = {createTodo: function() {}};
-          this.eventMock = {which: '13'};
-          this.view = new AppView({collection: collectionMock});
-          this.view.render();
-          spyOn(collectionMock, 'createTodo');
+          this.eventMock = {which: 13};
         });
 
         describe('with a text other than white space in the input field for ' +
                  'new todos', function() {
-
           beforeEach(function() {
-            // preparation
             this.todoText  = 'something';
             this.view.$('#new-todo').val(this.todoText);
-
-            // execution
             this.view.createOnEnter(this.eventMock);
           });
 
-          it('calls "create" on the todos collection', function() {
-            // check
-            expect(this.view.collection.createTodo).toHaveBeenCalledWith(
-              this.todoText);
+          it('calls "add" on the todo collection with a new todo model with ' +
+             'the entered text as title', function() {
+            expect(this.view.collection.add).toHaveBeenCalled();
+            var todo = this.view.collection.add.mostRecentCall.args[0];
+            expect(todo instanceof Todo).toBe(true);
+            expect(todo.get('title')).toBe(this.todoText);
           });
 
           it('empties the input field', function() {
-            // check
             expect(this.view.$('#new-todo')).toHaveValue('');
           });
         });
 
         describe('with nothing in the input field',
                  function() {
-          it('does not call "create on the todos collection', function() {
-            // preparation
+          it('does not call "add" on the todo collection', function() {
             this.view.$('#new-todo').val('');
-
-            // execution
             this.view.createOnEnter(this.eventMock);
-
-            // check
-            expect(this.view.collection.createTodo).not.toHaveBeenCalled();
+            expect(this.view.collection.add).not.toHaveBeenCalled();
           });
         });
 
         describe('with whitespace only in the input field',
                  function() {
           beforeEach(function() {
-            // preparation
             this.todoText  = '  ';
             this.view.$('#new-todo').val(this.todoText);
-
-            // execution
             this.view.createOnEnter(this.eventMock);
           });
 
-          it('does not call "create on the todos collection', function() {
-            // check
-            expect(this.view.collection.createTodo).not.toHaveBeenCalled();
+          it('does not call "add" on the todo collection', function() {
+            expect(this.view.collection.add).not.toHaveBeenCalled();
           });
 
           it('does not empty the input field', function() {
-            // check
             expect(this.view.$('#new-todo')).toHaveValue(this.todoText);
           });
+        });
+      });
+
+      describe('with any other key than <Enter> pressed', function() {
+        it('does not call "add" on the todo collection', function() {
+          this.eventMock = {which: 56};
+          this.todoText  = 'something';
+          this.view.$('#new-todo').val(this.todoText);
+          this.view.createOnEnter(this.eventMock);
+          expect(this.view.collection.add).not.toHaveBeenCalled();
         });
       });
     });
