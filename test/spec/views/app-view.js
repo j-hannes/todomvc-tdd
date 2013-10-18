@@ -45,46 +45,74 @@ define([
 
     describe ('createOnEnter', function() {
       describe('with the <Enter> key pressed', function() {
+
+        beforeEach(function() {
+          // preparation
+          var collectionMock = {createTodo: function() {}};
+          this.eventMock = {which: '13'};
+          this.view = new AppView({collection: collectionMock});
+          this.view.render();
+          spyOn(collectionMock, 'createTodo');
+        });
+
         describe('with a text other than white space in the input field for ' +
                  'new todos', function() {
-          it('calls "create" on the todos collection', function() {
-            // preparation
-            var collectionMock = {createTodo: function() {}};
-            var view      = new AppView({collection: collectionMock});
-            var eventMock = {which: '13'};
-            var todoText  = 'something';
 
-            view.render();
-            view.$('#new-todo').val(todoText);
-            spyOn(collectionMock, 'createTodo');
+          beforeEach(function() {
+            // preparation
+            this.todoText  = 'something';
+            this.view.$('#new-todo').val(this.todoText);
 
             // execution
-            view.createOnEnter(eventMock);
+            this.view.createOnEnter(this.eventMock);
+          });
 
+          it('calls "create" on the todos collection', function() {
             // check
-            expect(view.collection.createTodo).toHaveBeenCalledWith(todoText);
+            expect(this.view.collection.createTodo).toHaveBeenCalledWith(
+              this.todoText);
           });
 
           it('empties the input field', function() {
-
+            // check
+            expect(this.view.$('#new-todo')).toHaveValue('');
           });
         });
 
-        describe('with nothing or only whitespace in the input field',
+        describe('with nothing in the input field',
                  function() {
           it('does not call "create on the todos collection', function() {
+            // preparation
+            this.view.$('#new-todo').val('');
 
+            // execution
+            this.view.createOnEnter(this.eventMock);
+
+            // check
+            expect(this.view.collection.createTodo).not.toHaveBeenCalled();
+          });
+        });
+
+        describe('with whitespace only in the input field',
+                 function() {
+          beforeEach(function() {
+            // preparation
+            this.todoText  = '  ';
+            this.view.$('#new-todo').val(this.todoText);
+
+            // execution
+            this.view.createOnEnter(this.eventMock);
+          });
+
+          it('does not call "create on the todos collection', function() {
+            // check
+            expect(this.view.collection.createTodo).not.toHaveBeenCalled();
           });
 
           it('does not empty the input field', function() {
-
+            // check
+            expect(this.view.$('#new-todo')).toHaveValue(this.todoText);
           });
-        });
-      });
-
-      describe('with any alphanumeric key pressed', function() {
-        it('adds that char or digit to the input field', function() {
-
         });
       });
     });

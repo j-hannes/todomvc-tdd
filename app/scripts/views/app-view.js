@@ -19,7 +19,11 @@ define([
     },
 
     createOnEnter: function() {
-      this.collection.createTodo(this.$('#new-todo').val());
+      var $input = this.$('#new-todo');
+      if ($input.val().trim()) {
+        this.collection.createTodo($input.val());
+        $input.val('');
+      }
     }
   });
 
