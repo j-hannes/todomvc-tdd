@@ -24,8 +24,8 @@ define([
       });
 
       it('creates a new todo collection', function() {
-        expect(this.app.collection).toBeDefined();
-        expect(this.app.collection instanceof TodoCollection).toBeTrue();
+        expect(this.app.view.collection).toBeDefined();
+        expect(this.app.view.collection instanceof TodoCollection).toBe(true);
       });
     });
   });

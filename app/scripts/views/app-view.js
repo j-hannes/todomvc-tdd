@@ -19,6 +19,7 @@ define([
     },
 
     createOnEnter: function() {
+      this.collection.createTodo(this.$('#new-todo').val());
     }
   });
 

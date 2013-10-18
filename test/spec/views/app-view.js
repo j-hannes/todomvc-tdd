@@ -49,16 +49,17 @@ define([
                  'new todos', function() {
           it('calls "create" on the todos collection', function() {
             // preparation
-            var view     = new AppView(),
-                eMock    = {which: '13'},
-                todoText = 'something';
+            var collectionMock = {createTodo: function() {}};
+            var view      = new AppView({collection: collectionMock});
+            var eventMock = {which: '13'};
+            var todoText  = 'something';
 
             view.render();
             view.$('#new-todo').val(todoText);
-            spyOn(view.collection, 'createTodo');
+            spyOn(collectionMock, 'createTodo');
 
             // execution
-            view.createOnEnter(eMock);
+            view.createOnEnter(eventMock);
 
             // check
             expect(view.collection.createTodo).toHaveBeenCalledWith(todoText);
