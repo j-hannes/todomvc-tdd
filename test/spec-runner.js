@@ -1,6 +1,6 @@
 require.config({
   baseUrl: 'scripts',
-  urlArgs: 'cb=' + Math.random(),
+  // urlArgs: 'cb=' + Math.random(),
 
   paths: {
     // app components
@@ -70,6 +70,7 @@ require([
   specs.push('spec/models/todo-model-spec');
   specs.push('spec/routers/todo-app-spec');
   specs.push('spec/views/app-view-spec');
+  specs.push('spec/views/todo-view-spec');
 
   $(function(){
     require(specs, function(){

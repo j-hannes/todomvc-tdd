@@ -36,7 +36,7 @@ app.AppView = Backbone.View.extend({
     this.$footer = this.$('#footer');
     this.$main = this.$('#main');
 
-    this.listenTo(app.Todos, 'add', this.addOne);
+    // this.listenTo(app.Todos, 'add', this.addOne);
     this.listenTo(app.Todos, 'reset', this.addAll);
 
     this.listenTo(app.Todos, 'change:completed', this.filterOne);
@@ -71,9 +71,9 @@ app.AppView = Backbone.View.extend({
     this.allCheckbox.checked = !remaining;
   },
 
-  addOne: function( todo ) {
+  addOne: function(todo) {
     var view = new app.TodoView({ model: todo });
-    $('#todo-list').append( view.render().el );
+    this.$('#todo-list').append( view.render().el );
   },
 
   addAll: function() {
