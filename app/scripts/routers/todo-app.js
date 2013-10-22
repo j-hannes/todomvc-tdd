@@ -9,12 +9,16 @@ define([
   'use strict';
 
   var TodoApp = Backbone.Router.extend({
-    initialize:function() {
-      var todos = new TodoCollection();
+    initialize: function() {
+      this.todos = new TodoCollection();
 
-      this.view = new AppView({collection: todos});
+      this.view = new AppView({collection: this.todos});
       this.view.render();
       $('body').prepend(this.view.el);
+    },
+
+    start: function() {
+      this.todos.fetch();
     }
   });
 
