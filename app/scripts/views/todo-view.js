@@ -13,11 +13,14 @@ define([
 
     template: JST['app/scripts/templates/todo.ejs'],
 
+    initialize: function() {
+      if (!this.model) {
+        throw new Error('no model passed to view');
+      }
+    },
+
     render: function() {
-      this.$el.append(this.template({
-        completed: false,
-        title: this.model.get('title')
-      }));
+      this.$el.append(this.template(this.model.toJSON()));
       return this;
     },
   });

@@ -10,8 +10,17 @@ define([
   describe('View :: Todo', function() {
     describe('tagName', function() {
       it('should be <li>', function() {
-        var view = new TodoView();
+        var view = new TodoView({model: new TodoModel()});
         expect(view.tagName).toBe('li');
+      });
+    });
+
+    describe('initialize', function() {
+      it('should throw an error if no model is passed', function() {
+        var viewWithoutModel = function() {
+          new TodoView();
+        };
+        expect(viewWithoutModel).toThrow(new Error('no model passed to view'));
       });
     });
 
@@ -38,6 +47,17 @@ define([
         var title = this.view.model.get('title');
         expect(this.view.$('label')).toContainText(title);
       });
+
+      it('should check the checkbox if the model todo is completed',
+         function() {
+          var view = new TodoView({
+            model: new TodoModel({completed: true})
+          });
+          view.render();
+          console.log(view.el);
+          expect(view.$('input.toggle')).toHaveAttr('checked');
+        }
+      );
 
       it('returns the view', function() {
         expect(this.view.render()).toBe(this.view);
