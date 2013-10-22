@@ -50,7 +50,7 @@ define([
         var todoCollection = new TodoCollection();
         this.view = new AppView({collection: todoCollection});
         this.view.render();
-        spyOn(todoCollection, 'add');
+        spyOn(todoCollection, 'create');
       });
 
       describe('with the <Enter> key pressed', function() {
@@ -66,12 +66,11 @@ define([
             this.view.createOnEnter(this.eventMock);
           });
 
-          it('calls "add" on the todo collection with a new todo model with ' +
+          it('calls "create" on the todo collection with a new todo model with ' +
              'the entered text as title', function() {
-            expect(this.view.collection.add).toHaveBeenCalled();
-            var todo = this.view.collection.add.mostRecentCall.args[0];
-            expect(todo instanceof Todo).toBe(true);
-            expect(todo.get('title')).toBe(this.todoText);
+            expect(this.view.collection.create).toHaveBeenCalled();
+            expect(this.view.collection.create.mostRecentCall.args[0])
+              .toEqual({title: this.todoText});
           });
 
           it('empties the input field', function() {
@@ -81,10 +80,10 @@ define([
 
         describe('with nothing in the input field',
                  function() {
-          it('does not call "add" on the todo collection', function() {
+          it('does not call "create" on the todo collection', function() {
             this.view.$('#new-todo').val('');
             this.view.createOnEnter(this.eventMock);
-            expect(this.view.collection.add).not.toHaveBeenCalled();
+            expect(this.view.collection.create).not.toHaveBeenCalled();
           });
         });
 
@@ -96,8 +95,8 @@ define([
             this.view.createOnEnter(this.eventMock);
           });
 
-          it('does not call "add" on the todo collection', function() {
-            expect(this.view.collection.add).not.toHaveBeenCalled();
+          it('does not call "create" on the todo collection', function() {
+            expect(this.view.collection.create).not.toHaveBeenCalled();
           });
 
           it('does not empty the input field', function() {
@@ -107,12 +106,12 @@ define([
       });
 
       describe('with any other key than <Enter> pressed', function() {
-        it('does not call "add" on the todo collection', function() {
+        it('does not call "create" on the todo collection', function() {
           this.eventMock = {which: 56};
           this.todoText  = 'something';
           this.view.$('#new-todo').val(this.todoText);
           this.view.createOnEnter(this.eventMock);
-          expect(this.view.collection.add).not.toHaveBeenCalled();
+          expect(this.view.collection.create).not.toHaveBeenCalled();
         });
       });
     });

@@ -22,8 +22,9 @@ define([
     createOnEnter: function(e) {
       var $input = this.$('#new-todo');
       if (e.which === 13 && $input.val().trim()) {
-        var todo = new Todo({title: $input.val()});
-        this.collection.add(todo);
+        //var todo = new Todo({title: $input.val()});
+        //this.collection.add(todo);
+        this.collection.create({title: $input.val()});
         $input.val('');
       }
     }

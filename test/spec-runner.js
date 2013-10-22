@@ -7,6 +7,8 @@ require.config({
     jquery:     '/components/jquery/jquery',
     underscore: '/components/underscore/underscore',
     backbone:   '/components/backbone/backbone',
+    backboneLocalstorage: '/components/backbone.localStorage/' +
+                          'backbone.localStorage',
 
     // test components
     jasmine:       '/components/jasmine/lib/jasmine-core/jasmine',
@@ -25,6 +27,10 @@ require.config({
     backbone: {
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    backboneLocalstorage: {
+      deps: ['backbone'],
+      exports: 'Store'
     },
     jasmine: {
       exports: 'jasmine'
