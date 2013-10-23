@@ -13,6 +13,10 @@ define([
 
     template: JST['app/scripts/templates/todo.ejs'],
 
+    events: {
+      'click .toggle': 'toggleCompleted'
+    },
+
     initialize: function() {
       if (!this.model) {
         throw new Error('no model passed to view');
@@ -23,6 +27,9 @@ define([
       this.$el.append(this.template(this.model.toJSON()));
       return this;
     },
+
+    toggleCompleted: function() {
+    }
   });
 
   return TodoView;

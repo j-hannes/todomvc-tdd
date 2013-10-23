@@ -1,10 +1,11 @@
 /* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
+  'jquery',
   'models/todo-model',
   'views/todo-view',
   'jasmineJquery'
-], function(TodoModel, TodoView) {
+], function($, TodoModel, TodoView) {
   'use strict';
 
   describe('View :: Todo', function() {
@@ -12,6 +13,29 @@ define([
       it('should be <li>', function() {
         var view = new TodoView({model: new TodoModel()});
         expect(view.tagName).toBe('li');
+      });
+    });
+
+    describe('event', function() {
+      describe('click on .toggle', function() {
+        beforeEach(function() {
+          // the todo element needs to be in the DOM of the page to react to the
+          // click event
+          $('body').prepend($('<div id="todo"></div>'));
+        });
+
+        afterEach(function() {
+          $('#todo').remove();
+        });
+
+        it('calls toggleCompleted', function() {
+          var view = new TodoView({model: new TodoModel(), el: '#todo'});
+          view.render();
+          spyOn(view, 'toggleCompleted').andCallThrough();
+          view.delegateEvents();
+          view.$('.toggle').first().trigger('click');
+          expect(view.toggleCompleted).toHaveBeenCalled();
+        });
       });
     });
 
@@ -54,7 +78,6 @@ define([
             model: new TodoModel({completed: true})
           });
           view.render();
-          console.log(view.el);
           expect(view.$('input.toggle')).toHaveAttr('checked');
         }
       );
