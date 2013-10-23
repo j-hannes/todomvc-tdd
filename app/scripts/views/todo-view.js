@@ -4,8 +4,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'templates'
-], function ($, _, Backbone, JST) {
+  'templates',
+  'models/todo-model'
+], function ($, _, Backbone, JST, TodoModel) {
   'use strict';
 
   var TodoView = Backbone.View.extend({
@@ -19,7 +20,7 @@ define([
 
     initialize: function() {
       if (!this.model) {
-        throw new Error('no model passed to view');
+        this.model = new TodoModel();
       }
     },
 
