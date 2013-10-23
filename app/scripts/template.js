@@ -71,10 +71,10 @@ app.AppView = Backbone.View.extend({
     this.allCheckbox.checked = !remaining;
   },
 
-  addOne: function(todo) {
-    var view = new app.TodoView({ model: todo });
-    this.$('#todo-list').append( view.render().el );
-  },
+  // addOne: function(todo) {
+  //   var view = new app.TodoView({ model: todo });
+  //   this.$('#todo-list').append( view.render().el );
+  // },
 
   addAll: function() {
     this.$('#todo-list').html('');
@@ -138,9 +138,9 @@ app.Todo = Backbone.Model.extend({
 
 app.TodoView = Backbone.View.extend({
 
-  tagName: 'li',
+  // tagName: 'li',
 
-  template: _.template( $('#item-template').html() ),
+  // template: _.template( $('#item-template').html() ),
 
   events: {
     'dblclick label': 'edit',
@@ -153,9 +153,9 @@ app.TodoView = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html( this.template( this.model.toJSON() ) );
+    // this.$el.html( this.template( this.model.toJSON() ) );
     this.$input = this.$('.edit');
-    return this;
+    // return this;
   },
 
   edit: function() {
