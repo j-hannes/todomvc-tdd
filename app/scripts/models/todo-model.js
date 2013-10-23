@@ -9,6 +9,9 @@ define([
     defaults: {
       title: '',
       completed: false
+    },
+
+    toggle: function() {
     }
   });
 

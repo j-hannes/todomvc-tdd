@@ -90,5 +90,16 @@ define([
         expect(view.render()).toBe(view);
       });
     });
+
+    describe('toggleCompleted', function() {
+      it('should call toggle on the model', function() {
+        var view = new TodoView();
+        spyOn(view.model, 'toggle');
+
+        view.toggleCompleted();
+
+        expect(view.model.toggle).toHaveBeenCalled();
+      });
+    });
   });
 });

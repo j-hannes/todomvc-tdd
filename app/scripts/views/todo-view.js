@@ -30,6 +30,7 @@ define([
     },
 
     toggleCompleted: function() {
+      this.model.toggle();
     }
   });
 
