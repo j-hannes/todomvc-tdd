@@ -3,8 +3,9 @@
 define([
   'backbone',
   'models/todo-model',
+  'views/todo-view',
   'templates'
-], function(Backbone, Todo, JST) {
+], function(Backbone, Todo, TodoView, JST) {
   'use strict';
 
   var AppView = Backbone.View.extend({
@@ -14,19 +15,29 @@ define([
       'keypress #new-todo': 'createOnEnter'
     },
 
+    initialize: function() {
+      if (this.collection) {
+        this.listenTo(this.collection, 'add', this.addOne);
+      }
+    },
+
     render: function() {
       this.$el.append(this.template());
-      return this.el;
+      return this;
     },
 
     createOnEnter: function(e) {
       var $input = this.$('#new-todo');
       if (e.which === 13 && $input.val().trim()) {
-        //var todo = new Todo({title: $input.val()});
-        //this.collection.add(todo);
         this.collection.create({title: $input.val()});
         $input.val('');
       }
+    },
+
+    addOne: function(todo) {
+      var $todoList = this.$('#todo-list');
+      var view = new TodoView({model: todo});
+      $todoList.append(view.render().el);
     }
   });
 
