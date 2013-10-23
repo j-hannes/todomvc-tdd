@@ -4,8 +4,9 @@ define([
   'views/app-view',
   'models/todo-model',
   'collections/todo-collection',
+  'backbone',
   'jasmineJquery'
-], function(AppView, Todo, TodoCollection) {
+], function(AppView, TodoModel, TodoCollection, Backbone) {
   'use strict';
 
   describe('View :: App', function() {
@@ -26,22 +27,38 @@ define([
         }
       );
 
-      it('returns the view element', function() {
-        expect(this.view.render()).toBe(this.view.el);
+      it('returns the view', function() {
+        expect(this.view.render()).toBe(this.view);
       });
     });
 
-    describe('keypress #new-todo', function() {
-      it('calls createOnEnter', function() {
-        var view = new AppView();
-        view.render();
-        spyOn(view, 'createOnEnter');
-        // events must be rebound after creating the spy
-        view.delegateEvents();
+    describe('event', function() {
+      describe('"keypress" on #new-todo', function() {
+        it('calls createOnEnter', function() {
+          var view = new AppView();
+          view.render();
+          spyOn(view, 'createOnEnter');
+          // events must be rebound after creating the spy
+          view.delegateEvents();
 
-        view.$('#new-todo').trigger('keypress');
+          view.$('#new-todo').trigger('keypress');
 
-        expect(view.createOnEnter).toHaveBeenCalled();
+          expect(view.createOnEnter).toHaveBeenCalled();
+        });
+      });
+
+      describe('"add" on this.collection', function() {
+        it('calls addOne', function() {
+          var view = new AppView({collection: new Backbone.Collection()});
+          view.render();
+          spyOn(view, 'addOne');
+          // events must be bound to the spy
+          view.initialize();
+
+          view.collection.trigger('add', new TodoModel());
+
+          expect(view.addOne).toHaveBeenCalled();
+        });
       });
     });
 
@@ -113,6 +130,19 @@ define([
           this.view.createOnEnter(this.eventMock);
           expect(this.view.collection.create).not.toHaveBeenCalled();
         });
+      });
+    });
+
+    describe('addOne', function() {
+      it('appends another <li> element to ul#todo-list', function() {
+        var view = new AppView();
+        view.render();
+
+        var todoList = view.$('ul#todo-list');
+        var items = todoList.children('li').length;
+
+        view.addOne(new TodoModel());
+        expect(todoList.children('li').length).toBe(items + 1);
       });
     });
   });
