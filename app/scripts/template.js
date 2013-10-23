@@ -143,24 +143,24 @@ app.TodoView = Backbone.View.extend({
   // template: _.template( $('#item-template').html() ),
 
   events: {
-    'click .toggle': 'togglecompleted', // NEW
+    'click .toggle': 'togglecompleted',
     'dblclick label': 'edit',
-    'click .destroy': 'clear',           // NEW
+    'click .destroy': 'clear',
     'keypress .edit': 'updateOnEnter',
     'blur .edit': 'close'
   },
 
   initialize: function() {
     this.listenTo(this.model, 'change', this.render);
-    this.listenTo(this.model, 'destroy', this.remove);        // NEW
-    this.listenTo(this.model, 'visible', this.toggleVisible); // NEW
+    this.listenTo(this.model, 'destroy', this.remove);
+    this.listenTo(this.model, 'visible', this.toggleVisible);
   },
 
   render: function() {
     // this.$el.html( this.template( this.model.toJSON() ) );
 
-    this.$el.toggleClass( 'completed', this.model.get('completed') ); // NEW
-    this.toggleVisible();                                             // NEW
+    this.$el.toggleClass( 'completed', this.model.get('completed') );
+    this.toggleVisible();
 
     this.$input = this.$('.edit');
     // return this;
@@ -172,7 +172,7 @@ app.TodoView = Backbone.View.extend({
 
   isHidden : function () {
     var isCompleted = this.model.get('completed');
-    return ( // hidden cases only
+    return (
       (!isCompleted && app.TodoFilter === 'completed')
       || (isCompleted && app.TodoFilter === 'active')
     );
@@ -193,7 +193,7 @@ app.TodoView = Backbone.View.extend({
     if ( value ) {
       this.model.save({ title: value });
     } else {
-      this.clear(); // NEW
+      this.clear();
     }
 
     this.$el.removeClass('editing');
