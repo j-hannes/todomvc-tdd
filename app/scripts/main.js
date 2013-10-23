@@ -27,5 +27,6 @@ require.config({
 require([
   'routers/todo-app'
 ], function (TodoApp) {
-  new TodoApp();
+  var app = new TodoApp();
+  app.start();
 });
