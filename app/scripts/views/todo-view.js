@@ -17,7 +17,8 @@ define([
     events: {
       'click .toggle': 'toggleCompleted',
       'click .destroy': 'clear',
-      'dblclick label': 'edit'
+      'dblclick label': 'edit',
+      'blur .edit': 'close'
     },
 
     initialize: function() {
@@ -46,6 +47,9 @@ define([
     edit: function() {
       this.$el.addClass('editing');
       this.$input.focus();
+    },
+
+    close: function() {
     }
   });
 

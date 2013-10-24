@@ -55,6 +55,12 @@ define([
           testDomEventHandling('dblclick', 'label', 'edit');
         });
       });
+
+      describe('blur .edit', function() {
+        it('calls close', function() {
+          testDomEventHandling('blur', '.edit', 'close');
+        });
+      });
     });
 
     describe('model event', function() {
