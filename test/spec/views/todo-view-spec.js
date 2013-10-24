@@ -147,5 +147,16 @@ define([
         expect(view.model.toggle).toHaveBeenCalled();
       });
     });
+
+    describe('clear', function() {
+      it('destroys the model', function() {
+        var view = new TodoView({model: new TodoModel()});
+        spyOn(view.model, 'destroy');
+
+        view.clear();
+
+        expect(view.model.destroy).toHaveBeenCalled();
+      });
+    })
   });
 });

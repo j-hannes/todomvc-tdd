@@ -37,6 +37,7 @@ define([
     },
 
     clear: function() {
+      this.model.destroy();
     }
   });
 
