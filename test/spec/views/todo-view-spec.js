@@ -31,7 +31,7 @@ define([
         it('calls toggleCompleted', function() {
           var view = new TodoView({el: '#todo'});
           view.render();
-          spyOn(view, 'toggleCompleted').andCallThrough();
+          spyOn(view, 'toggleCompleted');
           view.delegateEvents();
           view.$('.toggle').first().trigger('click');
           expect(view.toggleCompleted).toHaveBeenCalled();

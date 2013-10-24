@@ -5,7 +5,7 @@ define([
 ], function(Backbone) {
   'use strict';
 
-  var Todo = Backbone.Model.extend({
+  var TodoModel = Backbone.Model.extend({
     defaults: {
       title: '',
       completed: false
@@ -18,5 +18,5 @@ define([
     }
   });
 
-  return Todo;
+  return TodoModel;
 });
