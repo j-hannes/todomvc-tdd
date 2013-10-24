@@ -122,19 +122,18 @@ app.AppView = Backbone.View.extend({
   }
 });
 
-app.Todo = Backbone.Model.extend({
+// app.Todo = Backbone.Model.extend({
+//   // defaults: {
+//   //   // title: '',
+//   //   // completed: false
+//   // },
 
-  // defaults: {
-    // title: '',
-    // completed: false
-  // },
-
-  toggle: function() {
-    this.save({
-      completed: !this.get('completed')
-    });
-  }
-});
+//   // toggle: function() {
+//   //   // this.save({
+//   //   //   completed: !this.get('completed')
+//   //   // });
+//   // }
+// });
 
 app.TodoView = Backbone.View.extend({
 
@@ -151,7 +150,7 @@ app.TodoView = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.listenTo(this.model, 'change', this.render);
+    // this.listenTo(this.model, 'change', this.render);
     this.listenTo(this.model, 'destroy', this.remove);
     this.listenTo(this.model, 'visible', this.toggleVisible);
   },

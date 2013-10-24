@@ -37,6 +37,20 @@ define([
           expect(view.toggleCompleted).toHaveBeenCalled();
         });
       });
+
+      describe('model change', function() {
+        it('calls render', function() {
+          var model = new TodoModel();
+          var view = new TodoView({model: model});
+          spyOn(view, 'render');
+          // run again to apply event handler to the spy
+          view.initialize();
+
+          model.trigger('change');
+
+          expect(view.render).toHaveBeenCalled();
+        });
+      });
     });
 
     describe('initialize', function() {

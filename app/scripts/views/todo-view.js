@@ -22,6 +22,7 @@ define([
       if (!this.model) {
         this.model = new TodoModel();
       }
+      this.listenTo(this.model, 'change', this.render);
     },
 
     render: function() {
