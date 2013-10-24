@@ -50,6 +50,7 @@ define([
     },
 
     close: function() {
+      this.$el.removeClass('editing');
     }
   });
 

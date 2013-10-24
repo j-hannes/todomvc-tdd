@@ -195,5 +195,14 @@ define([
         expect(view.$input.focus).toHaveBeenCalled();
       });
     });
+
+    describe('close', function() {
+      it('removes class "editing" from the view $el', function() {
+        var view = new TodoView();
+        view.$el.addClass('editing');
+        view.close();
+        expect(view.$el).not.toHaveClass('editing');
+      });
+    });
   });
 });
