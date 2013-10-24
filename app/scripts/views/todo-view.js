@@ -24,6 +24,7 @@ define([
         this.model = new TodoModel();
       }
       this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'destroy', this.remove);
     },
 
     render: function() {

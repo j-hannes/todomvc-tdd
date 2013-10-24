@@ -72,6 +72,19 @@ define([
           expect(view.render).toHaveBeenCalled();
         });
       });
+
+      describe('model destroy', function() {
+        it('removes this view', function() {
+          var view = new TodoView({model: new TodoModel()});
+          spyOn(view, 'remove');
+          // run again to apply event handler to the spy
+          view.initialize();
+
+          view.model.destroy();
+
+          expect(view.remove).toHaveBeenCalled();
+        });
+      });
     });
 
     describe('initialize', function() {
