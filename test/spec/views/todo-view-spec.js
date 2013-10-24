@@ -235,6 +235,7 @@ define([
           var view = new TodoView({model: new TodoModel()});
           view.render();
           view.$('input').val('do something');
+          spyOn(view.model, 'save');
           spyOn(view.model, 'destroy');
           // execution
           view.close();
@@ -258,6 +259,32 @@ define([
           expect(view.model.save).toHaveBeenCalled();
           expect(view.model.get('title')).toBe(todoText);
         });
+      });
+    });
+
+    describe('createOnEnter', function() {
+      it('calls close() when <ENTER> was pressed', function() {
+        // preparation
+        var view = new TodoView();
+        var ENTER_KEY = 13;
+        var e = {which: ENTER_KEY};
+        spyOn(view, 'close');
+        // execution
+        view.createOnEnter(e);
+        // check
+        expect(view.close).toHaveBeenCalled();
+      });
+
+      it('does not call close() when <ENTER> was not pressed', function() {
+        // preparation
+        var view = new TodoView();
+        var ENTER_KEY = 42;
+        var e = {which: ENTER_KEY};
+        spyOn(view, 'close');
+        // execution
+        view.createOnEnter(e);
+        // check
+        expect(view.close).not.toHaveBeenCalled();
       });
     });
   });

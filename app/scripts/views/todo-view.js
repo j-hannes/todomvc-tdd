@@ -60,7 +60,10 @@ define([
       this.$el.removeClass('editing');
     },
 
-    createOnEnter: function() {
+    createOnEnter: function(e) {
+      if (e.which === 13) {
+        this.close();
+      }
     }
   });
 

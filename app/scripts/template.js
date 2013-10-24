@@ -128,13 +128,13 @@ app.TodoView = Backbone.View.extend({
   // tagName: 'li',
   // template: _.template( $('#item-template').html() ),
 
-  events: {
-    // 'click .toggle': 'toggleCompleted',
-    // 'dblclick label': 'edit',
-    // 'click .destroy': 'clear',
-    'keypress .edit': 'updateOnEnter',
-    // 'blur .edit': 'close'
-  },
+  // events: {
+  //   // 'click .toggle': 'toggleCompleted',
+  //   // 'dblclick label': 'edit',
+  //   // 'click .destroy': 'clear',
+  //   // 'keypress .edit': 'updateOnEnter',
+  //   // 'blur .edit': 'close'
+  // },
 
   initialize: function() {
     // this.listenTo(this.model, 'change', this.render);
@@ -181,11 +181,11 @@ app.TodoView = Backbone.View.extend({
   //   // this.$el.removeClass('editing');
   // },
 
-  updateOnEnter: function( e ) {
-    if ( e.which === ENTER_KEY ) {
-      this.close();
-    }
-  },
+  // updateOnEnter: function( e ) {
+  //   if ( e.which === ENTER_KEY ) {
+  //     this.close();
+  //   }
+  // },
 
   // clear: function() {
   //   this.model.destroy();
