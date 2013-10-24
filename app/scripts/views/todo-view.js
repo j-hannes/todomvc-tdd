@@ -4,8 +4,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'templates'
-], function ($, _, Backbone, JST) {
+  'templates',
+  'models/todo-model'
+], function ($, _, Backbone, JST, TodoModel) {
   'use strict';
 
   var TodoView = Backbone.View.extend({
@@ -13,16 +14,26 @@ define([
 
     template: JST['app/scripts/templates/todo.ejs'],
 
+    events: {
+      'click .toggle': 'toggleCompleted'
+    },
+
     initialize: function() {
       if (!this.model) {
-        throw new Error('no model passed to view');
+        this.model = new TodoModel();
       }
+      this.listenTo(this.model, 'change', this.render);
     },
 
     render: function() {
-      this.$el.append(this.template(this.model.toJSON()));
+      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.toggleClass('completed', this.model.get('completed'));
       return this;
     },
+
+    toggleCompleted: function() {
+      this.model.toggle();
+    }
   });
 
   return TodoView;
