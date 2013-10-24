@@ -48,6 +48,19 @@ define([
           expect(view.clear).toHaveBeenCalled();
         });
       });
+
+      describe('doubleclick on label', function() {
+        it('calls edit', function() {
+          var view = new TodoView({el: '#todo'});
+          view.render();
+          spyOn(view, 'edit');
+          view.delegateEvents();
+
+          view.$('label').trigger('dblclick');
+
+          expect(view.edit).toHaveBeenCalled();
+        });
+      });
     });
 
     describe('model event', function() {

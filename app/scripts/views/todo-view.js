@@ -16,7 +16,8 @@ define([
 
     events: {
       'click .toggle': 'toggleCompleted',
-      'click .destroy': 'clear'
+      'click .destroy': 'clear',
+      'dblclick label': 'edit'
     },
 
     initialize: function() {
@@ -39,6 +40,9 @@ define([
 
     clear: function() {
       this.model.destroy();
+    },
+
+    edit: function() {
     }
   });
 
