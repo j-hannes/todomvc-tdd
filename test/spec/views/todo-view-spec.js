@@ -168,5 +168,26 @@ define([
         expect(view.model.destroy).toHaveBeenCalled();
       });
     });
+
+    describe('edit', function() {
+      it('add a class "editing" to the view $el', function() {
+        var view = new TodoView();
+        view.render();
+
+        view.edit();
+
+        expect(view.$el).toHaveClass('editing');
+      });
+
+      it('calls focus on the view\'s input field', function() {
+        var view = new TodoView();
+        view.render();
+        spyOn(view.$input, 'focus');
+
+        view.edit();
+
+        expect(view.$input.focus).toHaveBeenCalled();
+      });
+    });
   });
 });

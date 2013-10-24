@@ -146,7 +146,7 @@ app.TodoView = Backbone.View.extend({
     // this.$el.html( this.template( this.model.toJSON() ) );
     // this.$el.toggleClass( 'completed', this.model.get('completed') );
     this.toggleVisible();
-    this.$input = this.$('.edit');
+    // this.$input = this.$('.edit');
     // return this;
   },
 
@@ -166,10 +166,10 @@ app.TodoView = Backbone.View.extend({
   //   this.model.toggle();
   // },
 
-  edit: function() {
-    this.$el.addClass('editing');
-    this.$input.focus();
-  },
+  // edit: function() {
+  //   this.$el.addClass('editing');
+  //   this.$input.focus();
+  // },
 
   close: function() {
     var value = this.$input.val().trim();
