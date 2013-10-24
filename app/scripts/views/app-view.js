@@ -12,7 +12,8 @@ define([
     template: JST['app/scripts/templates/app.ejs'],
 
     events: {
-      'keypress #new-todo': 'createOnEnter'
+      'keypress #new-todo': 'createOnEnter',
+      'click #toggle-all': 'toggleAllComplete'
     },
 
     initialize: function() {
@@ -38,6 +39,10 @@ define([
       var $todoList = this.$('#todo-list');
       var view = new TodoView({model: todo});
       $todoList.append(view.render().el);
+    },
+
+    toggleAllComplete: function() {
+      console.log(new Date());
     }
   });
 

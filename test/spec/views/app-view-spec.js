@@ -1,12 +1,13 @@
 /* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
+  'jquery',
   'views/app-view',
   'models/todo-model',
   'collections/todo-collection',
   'backbone',
   'jasmineJquery'
-], function(AppView, TodoModel, TodoCollection, Backbone) {
+], function($, AppView, TodoModel, TodoCollection, Backbone) {
   'use strict';
 
   describe('View :: App', function() {
@@ -33,17 +34,35 @@ define([
     });
 
     describe('event', function() {
-      describe('"keypress" on #new-todo', function() {
+      beforeEach(function() {
+        $('body').prepend($('<div id="app"></div>'));
+      });
+
+      afterEach(function() {
+        $('#app').remove();
+      });
+
+      function testDomEventHandling(event, selector, method) {
+        // preparation
+        var view = new AppView({el: '#app'});
+        view.render();
+        spyOn(view, method);
+        view.delegateEvents();
+        // execution
+        view.$(selector).trigger(event);
+        // check
+        expect(view[method]).toHaveBeenCalled();
+      }
+
+      describe('keypress on #new-todo', function() {
         it('calls createOnEnter', function() {
-          var view = new AppView();
-          view.render();
-          spyOn(view, 'createOnEnter');
-          // events must be rebound after creating the spy
-          view.delegateEvents();
+          testDomEventHandling('keypress', '#new-todo', 'createOnEnter');
+        });
+      });
 
-          view.$('#new-todo').trigger('keypress');
-
-          expect(view.createOnEnter).toHaveBeenCalled();
+      describe('click on #toggle-all', function() {
+        it('calls toggleAllComplete()', function() {
+          testDomEventHandling('click', '#toggle-all', 'toggleAllComplete');
         });
       });
 
