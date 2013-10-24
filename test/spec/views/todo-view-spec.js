@@ -104,6 +104,16 @@ define([
         var view = new TodoView();
         expect(view.render()).toBe(view);
       });
+
+      it('should sync completed attr of model with class of $el', function() {
+        var view = new TodoView({model: new TodoModel({completed: true})});
+        view.render();
+        expect(view.el).toHaveClass('completed');
+
+        view = new TodoView({model: new TodoModel({completed: false})});
+        view.render();
+        expect(view.el).not.toHaveClass('completed');
+      });
     });
 
     describe('toggleCompleted', function() {
