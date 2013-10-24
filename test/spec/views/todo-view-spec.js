@@ -27,42 +27,32 @@ define([
         $('#todo').remove();
       });
 
+      function testDomEventHandling(event, selector, method) {
+        var view = new TodoView({el: '#todo'});
+        view.render();
+        spyOn(view, method);
+        view.delegateEvents();
+
+        view.$(selector).trigger(event);
+
+        expect(view[method]).toHaveBeenCalled();
+      }
+
       describe('click on .toggle', function() {
         it('calls toggleCompleted', function() {
-          var view = new TodoView({el: '#todo'});
-          view.render();
-          spyOn(view, 'toggleCompleted');
-          view.delegateEvents();
-
-          view.$('.toggle').trigger('click');
-
-          expect(view.toggleCompleted).toHaveBeenCalled();
+          testDomEventHandling('click', '.toggle', 'toggleCompleted');
         });
       });
 
       describe('click on .destroy', function() {
         it('will call clear', function() {
-          var view = new TodoView({el: '#todo'});
-          view.render();
-          spyOn(view, 'clear');
-          view.delegateEvents();
-
-          view.$('.destroy').first().trigger('click');
-
-          expect(view.clear).toHaveBeenCalled();
+          testDomEventHandling('click', '.destroy', 'clear');
         });
       });
 
       describe('doubleclick on label', function() {
         it('calls edit', function() {
-          var view = new TodoView({el: '#todo'});
-          view.render();
-          spyOn(view, 'edit');
-          view.delegateEvents();
-
-          view.$('label').trigger('dblclick');
-
-          expect(view.edit).toHaveBeenCalled();
+          testDomEventHandling('dblclick', 'label', 'edit');
         });
       });
     });
