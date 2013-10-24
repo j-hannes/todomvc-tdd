@@ -171,15 +171,15 @@ app.TodoView = Backbone.View.extend({
   //   this.$input.focus();
   // },
 
-  close: function() {
-    var value = this.$input.val().trim();
-    if ( value ) {
-      this.model.save({ title: value });
-    } else {
-      this.clear();
-    }
-    // this.$el.removeClass('editing');
-  },
+  // close: function() {
+  //   // var value = this.$input.val().trim();
+  //   // if ( value ) {
+  //   //   this.model.save({ title: value });
+  //   // } else {
+  //   //   this.clear();
+  //   // }
+  //   // this.$el.removeClass('editing');
+  // },
 
   updateOnEnter: function( e ) {
     if ( e.which === ENTER_KEY ) {

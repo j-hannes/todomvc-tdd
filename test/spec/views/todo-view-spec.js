@@ -198,10 +198,60 @@ define([
 
     describe('close', function() {
       it('removes class "editing" from the view $el', function() {
+        // preparation
         var view = new TodoView();
+        view.render();
         view.$el.addClass('editing');
+        // execution
         view.close();
+        // check
         expect(view.$el).not.toHaveClass('editing');
+      });
+
+      describe('with only whitespace in the input', function() {
+        it('destroys the model', function() {
+          // preparation
+          var view = new TodoView();
+          view.render();
+          view.$('input').val(' ');
+          spyOn(view.model, 'destroy');
+          // execution
+          view.close();
+          // check
+          expect(view.model.destroy).toHaveBeenCalled();
+        });
+      });
+
+      describe('with a value in the input', function() {
+        it('does not destroy the model', function() {
+          // preparation
+          TodoModel = TodoModel.extend({urlRoot: '/'});
+          var view = new TodoView({model: new TodoModel()});
+          view.render();
+          view.$('input').val('do something');
+          spyOn(view.model, 'destroy');
+          // execution
+          view.close();
+          // check
+          expect(view.model.destroy).not.toHaveBeenCalled();
+        });
+
+        it('calls save() on the model with value as title', function() {
+          // preparation
+          TodoModel = TodoModel.extend({urlRoot: '/'});
+          var view = new TodoView();
+          var todoText = 'do something';
+          view.render();
+          view.$('input').val(todoText);
+          spyOn(view.model, 'save').andCallFake(function(attrs) {
+            this.set(attrs);
+          });
+          // execution
+          view.close();
+          // check
+          expect(view.model.save).toHaveBeenCalled();
+          expect(view.model.get('title')).toBe(todoText);
+        });
       });
     });
   });

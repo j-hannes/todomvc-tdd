@@ -50,6 +50,12 @@ define([
     },
 
     close: function() {
+      var value = this.$input.val().trim();
+      if (value) {
+        this.model.save({title: value});
+      } else {
+        this.model.destroy();
+      }
       this.$el.removeClass('editing');
     }
   });
