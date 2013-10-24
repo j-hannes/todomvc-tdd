@@ -15,7 +15,8 @@ define([
     template: JST['app/scripts/templates/todo.ejs'],
 
     events: {
-      'click .toggle': 'toggleCompleted'
+      'click .toggle': 'toggleCompleted',
+      'click .destroy': 'clear'
     },
 
     initialize: function() {
@@ -33,6 +34,9 @@ define([
 
     toggleCompleted: function() {
       this.model.toggle();
+    },
+
+    clear: function() {
     }
   });
 
