@@ -10,7 +10,6 @@ var Workspace = Backbone.Router.extend({
       param = param.trim();
     }
     app.TodoFilter = param || '';
-
     app.Todos.trigger('filter');
   }
 });
@@ -19,9 +18,7 @@ app.TodoRouter = new Workspace();
 Backbone.history.start();
 
 app.AppView = Backbone.View.extend({
-
   // el: '#todoapp',
-
   // statsTemplate: _.template( $('#stats-template').html() ),
 
   events: {
@@ -35,30 +32,24 @@ app.AppView = Backbone.View.extend({
     this.$input = this.$('#new-todo');
     this.$footer = this.$('#footer');
     this.$main = this.$('#main');
-
     // this.listenTo(app.Todos, 'add', this.addOne);
     this.listenTo(app.Todos, 'reset', this.addAll);
-
     this.listenTo(app.Todos, 'change:completed', this.filterOne);
     this.listenTo(app.Todos,'filter', this.filterAll);
     this.listenTo(app.Todos, 'all', this.render);
-
-    app.Todos.fetch();
+    // app.Todos.fetch();
   },
 
   render: function() {
     var completed = app.Todos.completed().length;
     var remaining = app.Todos.remaining().length;
-
     if ( app.Todos.length ) {
       this.$main.show();
       this.$footer.show();
-
       this.$footer.html(this.statsTemplate({
         completed: completed,
         remaining: remaining
       }));
-
       this.$('#filters li a')
         .removeClass('selected')
         .filter('[href="#/' + ( app.TodoFilter || '' ) + '"]')
@@ -67,7 +58,6 @@ app.AppView = Backbone.View.extend({
       this.$main.hide();
       this.$footer.hide();
     }
-
     this.allCheckbox.checked = !remaining;
   },
 
@@ -113,7 +103,6 @@ app.AppView = Backbone.View.extend({
 
   toggleAllComplete: function() {
     var completed = this.allCheckbox.checked;
-
     app.Todos.each(function( todo ) {
       todo.save({
         'completed': completed
@@ -136,9 +125,7 @@ app.AppView = Backbone.View.extend({
 // });
 
 app.TodoView = Backbone.View.extend({
-
   // tagName: 'li',
-
   // template: _.template( $('#item-template').html() ),
 
   events: {
@@ -157,10 +144,8 @@ app.TodoView = Backbone.View.extend({
 
   render: function() {
     // this.$el.html( this.template( this.model.toJSON() ) );
-
-    this.$el.toggleClass( 'completed', this.model.get('completed') );
+    // this.$el.toggleClass( 'completed', this.model.get('completed') );
     this.toggleVisible();
-
     this.$input = this.$('.edit');
     // return this;
   },
@@ -188,13 +173,11 @@ app.TodoView = Backbone.View.extend({
 
   close: function() {
     var value = this.$input.val().trim();
-
     if ( value ) {
       this.model.save({ title: value });
     } else {
       this.clear();
     }
-
     this.$el.removeClass('editing');
   },
 
@@ -210,9 +193,7 @@ app.TodoView = Backbone.View.extend({
 });
 
 app.TodoList = Backbone.Collection.extend({
-
   // model: app.Todo,
-
   // localStorage: new Backbone.LocalStorage('todos-backbone'),
 
   completed: function() {
