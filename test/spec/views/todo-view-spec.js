@@ -61,8 +61,7 @@ define([
     });
 
     describe('render', function() {
-      it('should insert the template content to the view\'s DOM ' +
-         'element', function() {
+      it('should insert the template content into the view $el', function() {
         var view = new TodoView();
         view.render();
         expect(view.$el).toContain('div.view');
@@ -85,25 +84,21 @@ define([
         expect(view.$('label')).toContainText(todoText);
       });
 
-      it('should check the checkbox if the model todo is completed',
-         function() {
-          var view = new TodoView({
-            model: new TodoModel({completed: true})
-          });
-          view.render();
-          expect(view.$('input.toggle')).toHaveAttr('checked');
-        }
-      );
+      it('should check the checkbox if the todo is completed', function() {
+        var view = new TodoView({
+          model: new TodoModel({completed: true})
+        });
+        view.render();
+        expect(view.$('input.toggle')).toHaveAttr('checked');
+      });
 
-      it('should not check the checkbox if the model todo is not completed',
-         function() {
-          var view = new TodoView({
-            model: new TodoModel({completed: false})
-          });
-          view.render();
-          expect(view.$('input.toggle')).not.toHaveAttr('checked');
-        }
-      );
+      it('should not check the checkbox if todo is not completed', function() {
+        var view = new TodoView({
+          model: new TodoModel({completed: false})
+        });
+        view.render();
+        expect(view.$('input.toggle')).not.toHaveAttr('checked');
+      });
 
       it('returns the view', function() {
         var view = new TodoView();
