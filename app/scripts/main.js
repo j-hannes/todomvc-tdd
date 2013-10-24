@@ -7,23 +7,26 @@ require.config({
       exports: '_'
     },
     backbone: {
-      deps: [
-        'underscore',
-        'jquery'
-      ],
+      deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    backboneLocalstorage: {
+      deps: ['backbone'],
+      exports: 'Store'
     }
   },
   paths: {
     jquery: '../bower_components/jquery/jquery',
+    underscore: '../bower_components/underscore/underscore',
     backbone: '../bower_components/backbone/backbone',
-    underscore: '../bower_components/underscore/underscore'
+    backboneLocalstorage: '../bower_components/backbone.localStorage/' +
+                          'backbone.localStorage'
   }
 });
 
 require([
-  'views/app'
-], function (App) {
-  var app = new App();
-  app.render();
+  'routers/todo-app'
+], function (TodoApp) {
+  var app = new TodoApp();
+  app.start();
 });

@@ -1,8 +1,8 @@
 [OK] Story 1 - see interface
-Story 2 - enter a new todo
-Story 3 - restore todos
-Story 4 - mark a todo as completed
-Story 5 - delete a todo
+[OK] Story 2 - enter a new todo
+[OK] Story 3 - restore todos
+[OK] Story 4 - mark a todo as completed
+[OK] Story 5 - delete a todo
 Story 6 - edit a todo
 Story 7 - toggle completed for all todos
 Story 8 - see footer with items left

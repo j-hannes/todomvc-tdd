@@ -1,33 +1,22 @@
-/* global define, describe, it, expect, beforeEach, afterEach, */
+/* global define, describe, it, expect, beforeEach, afterEach */
 
 define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'models/todo',
-  'collections/todo',
-  'jasmineJquery'
-], function($, _, Backbone, Todo, TodoCollection) {
+  'models/todo-model',
+  'collections/todo-collection'
+], function(Todo, TodoCollection) {
   'use strict';
 
   describe('Collection :: Todos', function() {
+    beforeEach(function() {
+      this.todos = new TodoCollection();
+    });
+    it('is referenced to TodoModel', function() {
+      expect(this.todos.model).toBe(Todo);
+    });
 
-    describe('addTodo', function() {
-      var todoText = 'get some milk',
-          todos;
-
-      beforeEach(function() {
-        todos = new TodoCollection();
-        todos.addTodo(todoText);
-      });
-
-      it('adds a new todo model', function() {
-        expect(todos.length).toBe(1);
-      });
-
-      it('adds the model with the submitted title', function() {
-        expect(todos.at(todos.length - 1).get('title')).toBe(todoText);
-      });
+    it('uses localStorage "todos-backbone" to save items', function() {
+      expect(this.todos.localStorage).toBeDefined();
+      expect(this.todos.localStorage.name).toBe('todos-backbone');
     });
   });
 });

@@ -1,123 +1,149 @@
 /* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
-  'jquery',
-  'underscore',
+  'views/app-view',
+  'models/todo-model',
+  'collections/todo-collection',
   'backbone',
-  'views/app',
-  'models/todo',
-  'collections/todo',
   'jasmineJquery'
-], function($, _, Backbone, App, Todo, TodoCollection) {
+], function(AppView, TodoModel, TodoCollection, Backbone) {
   'use strict';
- 
-  $.fn.pressKeys = function(string) {
-    var keys = {
-      '\n': 13,
-      ' ': 32,
-      'e': 69,
-      'g': 71,
-      'i': 73,
-      'k': 75,
-      'l': 76,
-      'm': 77,
-      'o': 79,
-      's': 83,
-      't': 84
-    };
-    _.each(string, function(char) {
-      var e = $.Event('keypress');
-      e.which   = keys[char];
-      e.keyCode = keys[char];
-      this.trigger(e);
-      if (e.which !== 13) {
-        this.val(this.val() + char);
-      }
-    }, this);
-  };
 
   describe('View :: App', function() {
-    describe('render()', function() {
+    describe('render', function() {
       beforeEach(function() {
-        this.app = new App();
-        this.app.render();
+        this.view = new AppView();
       });
 
       afterEach(function() {
-        this.app.remove();
-        $('body').append('<section id="todoapp"></section>');
+        this.view.remove();
       });
 
-      it('returns the view object', function() {
-        expect(this.app.render()).toEqual(this.app);
-      });
+      it('should append the template content to the view\'s DOM element',
+         function() {
+          this.view.render();
+          expect(this.view.$el).toContain('section#todoapp');
+          expect(this.view.$el).toContain('div#info');
+        }
+      );
 
-      it('appends the template content to a #todoapp container', function() {
-        expect($('#todoapp')).toContain('header#header');
-        expect($('#todoapp')).toContain('section#main');
-        expect($('#todoapp')).toContain('footer#footer');
-      });
-    });
-
-    describe('initialization', function() {
-      it('attaches a todo collection', function() {
-        var app = new App();
-        expect(app.collection instanceof TodoCollection).toBeTruthy();
+      it('returns the view', function() {
+        expect(this.view.render()).toBe(this.view);
       });
     });
 
-    describe('Entering a new todo, followed by <Enter>', function() {
-      var todoText = 'get some milk';
-      var app;
+    describe('event', function() {
+      describe('"keypress" on #new-todo', function() {
+        it('calls createOnEnter', function() {
+          var view = new AppView();
+          view.render();
+          spyOn(view, 'createOnEnter');
+          // events must be rebound after creating the spy
+          view.delegateEvents();
 
+          view.$('#new-todo').trigger('keypress');
+
+          expect(view.createOnEnter).toHaveBeenCalled();
+        });
+      });
+
+      describe('"add" on this.collection', function() {
+        it('calls addOne', function() {
+          var view = new AppView({collection: new Backbone.Collection()});
+          view.render();
+          spyOn(view, 'addOne');
+          // events must be bound to the spy
+          view.initialize();
+
+          view.collection.trigger('add', new TodoModel());
+
+          expect(view.addOne).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('createOnEnter', function() {
       beforeEach(function() {
-        app = new App();
-        app.render();
-
-        spyOn(app.collection, 'addTodo');
+        var todoCollection = new TodoCollection();
+        this.view = new AppView({collection: todoCollection});
+        this.view.render();
+        spyOn(todoCollection, 'create');
       });
 
-      afterEach(function() {
-        app.remove();
-        $('body').append('<section id="todoapp"></section>');
-      });
-
-      describe('with text "' + todoText + '"', function() {
+      describe('with the <Enter> key pressed', function() {
         beforeEach(function() {
-          $('input#new-todo').pressKeys(todoText + '\n');
+          this.eventMock = {which: 13};
         });
 
-        it('should call collection.addTodo (once)', function() {
-          expect(app.collection.addTodo).toHaveBeenCalled();
-          expect(app.collection.addTodo.calls.length).toBe(1);
+        describe('with a text other than white space in the input field for ' +
+                 'new todos', function() {
+          beforeEach(function() {
+            this.todoText  = 'something';
+            this.view.$('#new-todo').val(this.todoText);
+            this.view.createOnEnter(this.eventMock);
+          });
+
+          it('calls "create" on the todo collection with a new todo model with ' +
+             'the entered text as title', function() {
+            expect(this.view.collection.create).toHaveBeenCalled();
+            expect(this.view.collection.create.mostRecentCall.args[0])
+              .toEqual({title: this.todoText});
+          });
+
+          it('empties the input field', function() {
+            expect(this.view.$('#new-todo')).toHaveValue('');
+          });
         });
 
-        it('should call collection.addTodo with', function() {
-          expect(app.collection.addTodo).toHaveBeenCalledWith(todoText);
+        describe('with nothing in the input field',
+                 function() {
+          it('does not call "create" on the todo collection', function() {
+            this.view.$('#new-todo').val('');
+            this.view.createOnEnter(this.eventMock);
+            expect(this.view.collection.create).not.toHaveBeenCalled();
+          });
+        });
+
+        describe('with whitespace only in the input field',
+                 function() {
+          beforeEach(function() {
+            this.todoText  = '  ';
+            this.view.$('#new-todo').val(this.todoText);
+            this.view.createOnEnter(this.eventMock);
+          });
+
+          it('does not call "create" on the todo collection', function() {
+            expect(this.view.collection.create).not.toHaveBeenCalled();
+          });
+
+          it('does not empty the input field', function() {
+            expect(this.view.$('#new-todo')).toHaveValue(this.todoText);
+          });
         });
       });
 
-      describe('with text ""', function() {
-        beforeEach(function() {
-          $('input#new-todo').pressKeys('   \n');
-        });
-
-        it('should not call collection.addTodo', function() {
-          expect(app.collection.addTodo).not.toHaveBeenCalled();
+      describe('with any other key than <Enter> pressed', function() {
+        it('does not call "create" on the todo collection', function() {
+          this.eventMock = {which: 56};
+          this.todoText  = 'something';
+          this.view.$('#new-todo').val(this.todoText);
+          this.view.createOnEnter(this.eventMock);
+          expect(this.view.collection.create).not.toHaveBeenCalled();
         });
       });
+    });
 
-      describe('with text "   "', function() {
-        beforeEach(function() {
-          $('input#new-todo').pressKeys('   \n');
-        });
+    describe('addOne', function() {
+      it('appends another <li> element to ul#todo-list', function() {
+        var view = new AppView();
+        view.render();
 
-        it('should not call collection.addTodo', function() {
-          expect(app.collection.addTodo).not.toHaveBeenCalled();
-        });
+        var todoList = view.$('ul#todo-list');
+        var items = todoList.children('li').length;
+
+        view.addOne(new TodoModel());
+        expect(todoList.children('li').length).toBe(items + 1);
       });
     });
   });
-
- 
 });
