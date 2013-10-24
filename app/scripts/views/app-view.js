@@ -42,7 +42,6 @@ define([
     },
 
     toggleAllComplete: function() {
-      console.log(new Date());
     }
   });
 
