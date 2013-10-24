@@ -3,7 +3,7 @@
 [OK] Story 3 - restore todos
 [OK] Story 4 - mark a todo as completed
 [OK] Story 5 - delete a todo
-Story 6 - edit a todo
+[OK] Story 6 - edit a todo
 Story 7 - toggle completed for all todos
 Story 8 - see footer with items left
 Story 9 - filter todos according to completion status

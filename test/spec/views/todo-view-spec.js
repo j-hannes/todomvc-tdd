@@ -16,55 +16,65 @@ define([
       });
     });
 
-    describe('event', function() {
+    describe('DOM event', function() {
+      beforeEach(function() {
+        // the todo element needs to be in the DOM of the page to react to the
+        // click event
+        $('body').prepend($('<div id="todo"></div>'));
+      });
+
+      afterEach(function() {
+        $('#todo').remove();
+      });
+
+      function testDomEventHandling(event, selector, method) {
+        var view = new TodoView({el: '#todo'});
+        view.render();
+        spyOn(view, method);
+        view.delegateEvents();
+
+        view.$(selector).trigger(event);
+
+        expect(view[method]).toHaveBeenCalled();
+      }
+
       describe('click on .toggle', function() {
-        beforeEach(function() {
-          // the todo element needs to be in the DOM of the page to react to the
-          // click event
-          $('body').prepend($('<div id="todo"></div>'));
-        });
-
-        afterEach(function() {
-          $('#todo').remove();
-        });
-
         it('calls toggleCompleted', function() {
-          var view = new TodoView({el: '#todo'});
-          view.render();
-          spyOn(view, 'toggleCompleted');
-          view.delegateEvents();
-          view.$('.toggle').first().trigger('click');
-          expect(view.toggleCompleted).toHaveBeenCalled();
+          testDomEventHandling('click', '.toggle', 'toggleCompleted');
         });
       });
 
       describe('click on .destroy', function() {
-        beforeEach(function() {
-          // the todo element needs to be in the DOM of the page to react to the
-          // click event
-          $('body').prepend($('<div id="todo"></div>'));
-        });
-
-        afterEach(function() {
-          $('#todo').remove();
-        });
-
         it('will call clear', function() {
-          var view = new TodoView({el: '#todo'});
-          view.render();
-          spyOn(view, 'clear');
-          view.delegateEvents();
-          view.$('.destroy').first().trigger('click');
-          expect(view.clear).toHaveBeenCalled();
+          testDomEventHandling('click', '.destroy', 'clear');
         });
       });
 
-      describe('model change', function() {
+      describe('doubleclick on label', function() {
+        it('calls edit', function() {
+          testDomEventHandling('dblclick', 'label', 'edit');
+        });
+      });
+
+      describe('blur .edit', function() {
+        it('calls close', function() {
+          testDomEventHandling('blur', '.edit', 'close');
+        });
+      });
+
+      describe('keypress .edit', function() {
+        it('calls createOnEnter()', function() {
+          testDomEventHandling('keypress', '.edit', 'createOnEnter');
+        });
+      });
+    });
+
+    describe('model event', function() {
+      describe('change', function() {
         it('calls render', function() {
           var model = new TodoModel();
           var view = new TodoView({model: model});
           spyOn(view, 'render');
-          // run again to apply event handler to the spy
           view.initialize();
 
           model.trigger('change');
@@ -73,11 +83,10 @@ define([
         });
       });
 
-      describe('model destroy', function() {
+      describe('destroy', function() {
         it('removes this view', function() {
           var view = new TodoView({model: new TodoModel()});
           spyOn(view, 'remove');
-          // run again to apply event handler to the spy
           view.initialize();
 
           view.model.destroy();
@@ -170,6 +179,113 @@ define([
 
         expect(view.model.destroy).toHaveBeenCalled();
       });
-    })
+    });
+
+    describe('edit', function() {
+      it('add a class "editing" to the view $el', function() {
+        var view = new TodoView();
+        view.render();
+
+        view.edit();
+
+        expect(view.$el).toHaveClass('editing');
+      });
+
+      it('calls focus on the view\'s input field', function() {
+        var view = new TodoView();
+        view.render();
+        spyOn(view.$input, 'focus');
+
+        view.edit();
+
+        expect(view.$input.focus).toHaveBeenCalled();
+      });
+    });
+
+    describe('close', function() {
+      it('removes class "editing" from the view $el', function() {
+        // preparation
+        var view = new TodoView();
+        view.render();
+        view.$el.addClass('editing');
+        // execution
+        view.close();
+        // check
+        expect(view.$el).not.toHaveClass('editing');
+      });
+
+      describe('with only whitespace in the input', function() {
+        it('destroys the model', function() {
+          // preparation
+          var view = new TodoView();
+          view.render();
+          view.$('input').val(' ');
+          spyOn(view.model, 'destroy');
+          // execution
+          view.close();
+          // check
+          expect(view.model.destroy).toHaveBeenCalled();
+        });
+      });
+
+      describe('with a value in the input', function() {
+        it('does not destroy the model', function() {
+          // preparation
+          TodoModel = TodoModel.extend({urlRoot: '/'});
+          var view = new TodoView({model: new TodoModel()});
+          view.render();
+          view.$('input').val('do something');
+          spyOn(view.model, 'save');
+          spyOn(view.model, 'destroy');
+          // execution
+          view.close();
+          // check
+          expect(view.model.destroy).not.toHaveBeenCalled();
+        });
+
+        it('calls save() on the model with value as title', function() {
+          // preparation
+          TodoModel = TodoModel.extend({urlRoot: '/'});
+          var view = new TodoView();
+          var todoText = 'do something';
+          view.render();
+          view.$('input').val(todoText);
+          spyOn(view.model, 'save').andCallFake(function(attrs) {
+            this.set(attrs);
+          });
+          // execution
+          view.close();
+          // check
+          expect(view.model.save).toHaveBeenCalled();
+          expect(view.model.get('title')).toBe(todoText);
+        });
+      });
+    });
+
+    describe('createOnEnter', function() {
+      it('calls close() when <ENTER> was pressed', function() {
+        // preparation
+        var view = new TodoView();
+        var ENTER_KEY = 13;
+        var e = {which: ENTER_KEY};
+        spyOn(view, 'close');
+        // execution
+        view.createOnEnter(e);
+        // check
+        expect(view.close).toHaveBeenCalled();
+      });
+
+      it('does not call close() when <ENTER> was not pressed', function() {
+        // preparation
+        var view = new TodoView();
+        var ENTER_KEY = 42;
+        var e = {which: ENTER_KEY};
+        spyOn(view, 'close');
+        // execution
+        view.createOnEnter(e);
+        // check
+        expect(view.close).not.toHaveBeenCalled();
+      });
+    });
   });
 });

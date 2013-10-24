@@ -16,7 +16,10 @@ define([
 
     events: {
       'click .toggle': 'toggleCompleted',
-      'click .destroy': 'clear'
+      'click .destroy': 'clear',
+      'dblclick label': 'edit',
+      'blur .edit': 'close',
+      'keypress .edit': 'createOnEnter'
     },
 
     initialize: function() {
@@ -30,6 +33,7 @@ define([
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.toggleClass('completed', this.model.get('completed'));
+      this.$input = this.$('.edit');
       return this;
     },
 
@@ -39,6 +43,27 @@ define([
 
     clear: function() {
       this.model.destroy();
+    },
+
+    edit: function() {
+      this.$el.addClass('editing');
+      this.$input.focus();
+    },
+
+    close: function() {
+      var value = this.$input.val().trim();
+      if (value) {
+        this.model.save({title: value});
+      } else {
+        this.model.destroy();
+      }
+      this.$el.removeClass('editing');
+    },
+
+    createOnEnter: function(e) {
+      if (e.which === 13) {
+        this.close();
+      }
     }
   });
 
