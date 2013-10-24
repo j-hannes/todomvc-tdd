@@ -16,18 +16,18 @@ define([
       });
     });
 
-    describe('event', function() {
+    describe('DOM event', function() {
+      beforeEach(function() {
+        // the todo element needs to be in the DOM of the page to react to the
+        // click event
+        $('body').prepend($('<div id="todo"></div>'));
+      });
+
+      afterEach(function() {
+        $('#todo').remove();
+      });
+
       describe('click on .toggle', function() {
-        beforeEach(function() {
-          // the todo element needs to be in the DOM of the page to react to the
-          // click event
-          $('body').prepend($('<div id="todo"></div>'));
-        });
-
-        afterEach(function() {
-          $('#todo').remove();
-        });
-
         it('calls toggleCompleted', function() {
           var view = new TodoView({el: '#todo'});
           view.render();
@@ -39,16 +39,6 @@ define([
       });
 
       describe('click on .destroy', function() {
-        beforeEach(function() {
-          // the todo element needs to be in the DOM of the page to react to the
-          // click event
-          $('body').prepend($('<div id="todo"></div>'));
-        });
-
-        afterEach(function() {
-          $('#todo').remove();
-        });
-
         it('will call clear', function() {
           var view = new TodoView({el: '#todo'});
           view.render();
@@ -58,8 +48,10 @@ define([
           expect(view.clear).toHaveBeenCalled();
         });
       });
+    });
 
-      describe('model change', function() {
+    describe('model event', function() {
+      describe('change', function() {
         it('calls render', function() {
           var model = new TodoModel();
           var view = new TodoView({model: model});
@@ -73,7 +65,7 @@ define([
         });
       });
 
-      describe('model destroy', function() {
+      describe('destroy', function() {
         it('removes this view', function() {
           var view = new TodoView({model: new TodoModel()});
           spyOn(view, 'remove');
@@ -170,6 +162,6 @@ define([
 
         expect(view.model.destroy).toHaveBeenCalled();
       });
-    })
+    });
   });
 });
