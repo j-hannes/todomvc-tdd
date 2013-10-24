@@ -131,14 +131,14 @@ app.TodoView = Backbone.View.extend({
   events: {
     // 'click .toggle': 'toggleCompleted',
     'dblclick label': 'edit',
-    'click .destroy': 'clear',
+    // 'click .destroy': 'clear',
     'keypress .edit': 'updateOnEnter',
     'blur .edit': 'close'
   },
 
   initialize: function() {
     // this.listenTo(this.model, 'change', this.render);
-    this.listenTo(this.model, 'destroy', this.remove);
+    // this.listenTo(this.model, 'destroy', this.remove);
     this.listenTo(this.model, 'visible', this.toggleVisible);
   },
 
@@ -187,9 +187,9 @@ app.TodoView = Backbone.View.extend({
     }
   },
 
-  clear: function() {
-    this.model.destroy();
-  }
+  // clear: function() {
+  //   this.model.destroy();
+  // }
 });
 
 app.TodoList = Backbone.Collection.extend({

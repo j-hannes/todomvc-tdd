@@ -15,7 +15,8 @@ define([
     template: JST['app/scripts/templates/todo.ejs'],
 
     events: {
-      'click .toggle': 'toggleCompleted'
+      'click .toggle': 'toggleCompleted',
+      'click .destroy': 'clear'
     },
 
     initialize: function() {
@@ -23,6 +24,7 @@ define([
         this.model = new TodoModel();
       }
       this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'destroy', this.remove);
     },
 
     render: function() {
@@ -33,6 +35,10 @@ define([
 
     toggleCompleted: function() {
       this.model.toggle();
+    },
+
+    clear: function() {
+      this.model.destroy();
     }
   });
 

@@ -38,6 +38,27 @@ define([
         });
       });
 
+      describe('click on .destroy', function() {
+        beforeEach(function() {
+          // the todo element needs to be in the DOM of the page to react to the
+          // click event
+          $('body').prepend($('<div id="todo"></div>'));
+        });
+
+        afterEach(function() {
+          $('#todo').remove();
+        });
+
+        it('will call clear', function() {
+          var view = new TodoView({el: '#todo'});
+          view.render();
+          spyOn(view, 'clear');
+          view.delegateEvents();
+          view.$('.destroy').first().trigger('click');
+          expect(view.clear).toHaveBeenCalled();
+        });
+      });
+
       describe('model change', function() {
         it('calls render', function() {
           var model = new TodoModel();
@@ -49,6 +70,19 @@ define([
           model.trigger('change');
 
           expect(view.render).toHaveBeenCalled();
+        });
+      });
+
+      describe('model destroy', function() {
+        it('removes this view', function() {
+          var view = new TodoView({model: new TodoModel()});
+          spyOn(view, 'remove');
+          // run again to apply event handler to the spy
+          view.initialize();
+
+          view.model.destroy();
+
+          expect(view.remove).toHaveBeenCalled();
         });
       });
     });
@@ -126,5 +160,16 @@ define([
         expect(view.model.toggle).toHaveBeenCalled();
       });
     });
+
+    describe('clear', function() {
+      it('destroys the model', function() {
+        var view = new TodoView({model: new TodoModel()});
+        spyOn(view.model, 'destroy');
+
+        view.clear();
+
+        expect(view.model.destroy).toHaveBeenCalled();
+      });
+    })
   });
 });
