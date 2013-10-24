@@ -61,14 +61,20 @@ define([
     });
 
     describe('render', function() {
-      it('should append the template content to the view\'s DOM element',
-         function() {
-          var view = new TodoView();
-          view.render();
-          expect(view.$el).toContain('div.view');
-          expect(view.$el).toContain('input.edit');
-        }
-      );
+      it('should insert the template content to the view\'s DOM ' +
+         'element', function() {
+        var view = new TodoView();
+        view.render();
+        expect(view.$el).toContain('div.view');
+        expect(view.$el).toContain('input.edit');
+      });
+
+      it('should contains the content only once when called twice', function() {
+        var view = new TodoView();
+        view.render();
+        view.render();
+        expect(view.$el.find('div.view').length).toBe(1);
+      });
 
       it('should put the model\'s title inside the <label>', function() {
         var todoText = 'some text 123';
