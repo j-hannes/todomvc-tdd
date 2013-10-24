@@ -33,7 +33,9 @@ define([
           view.render();
           spyOn(view, 'toggleCompleted');
           view.delegateEvents();
-          view.$('.toggle').first().trigger('click');
+
+          view.$('.toggle').trigger('click');
+
           expect(view.toggleCompleted).toHaveBeenCalled();
         });
       });
@@ -44,7 +46,9 @@ define([
           view.render();
           spyOn(view, 'clear');
           view.delegateEvents();
+
           view.$('.destroy').first().trigger('click');
+
           expect(view.clear).toHaveBeenCalled();
         });
       });
@@ -69,7 +73,6 @@ define([
           var model = new TodoModel();
           var view = new TodoView({model: model});
           spyOn(view, 'render');
-          // run again to apply event handler to the spy
           view.initialize();
 
           model.trigger('change');
@@ -82,7 +85,6 @@ define([
         it('removes this view', function() {
           var view = new TodoView({model: new TodoModel()});
           spyOn(view, 'remove');
-          // run again to apply event handler to the spy
           view.initialize();
 
           view.model.destroy();
