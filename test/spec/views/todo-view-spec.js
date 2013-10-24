@@ -61,6 +61,12 @@ define([
           testDomEventHandling('blur', '.edit', 'close');
         });
       });
+
+      describe('keypress .edit', function() {
+        it('calls createOnEnter()', function() {
+          testDomEventHandling('keypress', '.edit', 'createOnEnter');
+        });
+      });
     });
 
     describe('model event', function() {

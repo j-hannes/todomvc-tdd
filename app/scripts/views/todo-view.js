@@ -18,7 +18,8 @@ define([
       'click .toggle': 'toggleCompleted',
       'click .destroy': 'clear',
       'dblclick label': 'edit',
-      'blur .edit': 'close'
+      'blur .edit': 'close',
+      'keypress .edit': 'createOnEnter'
     },
 
     initialize: function() {
@@ -57,6 +58,9 @@ define([
         this.model.destroy();
       }
       this.$el.removeClass('editing');
+    },
+
+    createOnEnter: function() {
     }
   });
 
