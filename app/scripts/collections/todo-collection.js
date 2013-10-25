@@ -9,7 +9,14 @@ define([
 
   var TodoCollection = Backbone.Collection.extend({
     model: Todo,
-    localStorage: new Backbone.LocalStorage('todos-backbone')
+
+    localStorage: new Backbone.LocalStorage('todos-backbone'),
+
+    remaining: function() {
+      return this.filter(function(todo) {
+        return todo.get('completed') === false;
+      });
+    }
   });
 
   return TodoCollection;

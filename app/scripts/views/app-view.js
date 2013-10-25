@@ -24,6 +24,7 @@ define([
 
     render: function() {
       this.$el.append(this.template());
+      this.allCheckbox = this.$('#toggle-all')[0];
       return this;
     },
 
@@ -42,6 +43,10 @@ define([
     },
 
     toggleAllComplete: function() {
+      var completed = this.collection.remaining().length > 0;
+      this.collection.each(function(todo) {
+        todo.save({completed: completed});
+      });
     }
   });
 
