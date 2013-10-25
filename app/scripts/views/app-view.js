@@ -24,7 +24,6 @@ define([
 
     render: function() {
       this.$el.append(this.template());
-      this.allCheckbox = this.$('#toggle-all')[0];
       return this;
     },
 
