@@ -1,12 +1,15 @@
 /* global define, describe, it, expect, beforeEach, afterEach, spyOn */
 
 define([
+  'jquery',
+  'underscore',
+  'jasmine',
   'views/app-view',
   'models/todo-model',
   'collections/todo-collection',
   'backbone',
   'jasmineJquery'
-], function(AppView, TodoModel, TodoCollection, Backbone) {
+], function($, _, jasmine, AppView, TodoModel, TodoCollection, Backbone) {
   'use strict';
 
   describe('View :: App', function() {
@@ -33,17 +36,35 @@ define([
     });
 
     describe('event', function() {
-      describe('"keypress" on #new-todo', function() {
+      beforeEach(function() {
+        $('body').prepend($('<div id="app"></div>'));
+      });
+
+      afterEach(function() {
+        $('#app').remove();
+      });
+
+      function testDomEventHandling(event, selector, method) {
+        // preparation
+        var view = new AppView({el: '#app'});
+        view.render();
+        spyOn(view, method);
+        view.delegateEvents();
+        // execution
+        view.$(selector).trigger(event);
+        // check
+        expect(view[method]).toHaveBeenCalled();
+      }
+
+      describe('keypress on #new-todo', function() {
         it('calls createOnEnter', function() {
-          var view = new AppView();
-          view.render();
-          spyOn(view, 'createOnEnter');
-          // events must be rebound after creating the spy
-          view.delegateEvents();
+          testDomEventHandling('keypress', '#new-todo', 'createOnEnter');
+        });
+      });
 
-          view.$('#new-todo').trigger('keypress');
-
-          expect(view.createOnEnter).toHaveBeenCalled();
+      describe('click on #toggle-all', function() {
+        it('calls toggleAllComplete()', function() {
+          testDomEventHandling('click', '#toggle-all', 'toggleAllComplete');
         });
       });
 
@@ -143,6 +164,56 @@ define([
 
         view.addOne(new TodoModel());
         expect(todoList.children('li').length).toBe(items + 1);
+      });
+    });
+
+    describe('toggleAllComplete', function() {
+      function mockModel(name) {
+        return jasmine.createSpyObj(name, ['save', 'set']);
+      }
+
+      function mockCollection(name, models) {
+        return {
+          each: function(iterator) {
+            return _.each(models, iterator);
+          }
+        };
+      }
+
+      beforeEach(function() {
+        // preparation
+        this.todo1 = mockModel('todo-1');
+        this.todo2 = mockModel('todo-2');
+        this.view = new AppView();
+        this.view.collection = mockCollection('todo', [this.todo1, this.todo2]);
+      });
+
+      describe('with some todos incomplete', function() {
+        it('saves all todos to completed', function() {
+          // preparation
+          this.view.collection.remaining = function() {
+            return {length: 1};
+          };
+          // execution
+          this.view.toggleAllComplete();
+          // check
+          expect(this.todo1.save).toHaveBeenCalledWith({completed: true});
+          expect(this.todo2.save).toHaveBeenCalledWith({completed: true});
+        });
+      });
+
+      describe('when the #toggle-all checkbox is checked', function() {
+        it('saves all todos to incomplete', function() {
+          // preparation
+          this.view.collection.remaining = function() {
+            return {length: 0};
+          };
+          // execution
+          this.view.toggleAllComplete();
+          // check
+          expect(this.todo1.save).toHaveBeenCalledWith({completed: false});
+          expect(this.todo2.save).toHaveBeenCalledWith({completed: false});
+        });
       });
     });
   });

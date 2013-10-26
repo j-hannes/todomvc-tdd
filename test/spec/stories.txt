@@ -4,7 +4,7 @@
 [OK] Story 4 - mark a todo as completed
 [OK] Story 5 - delete a todo
 [OK] Story 6 - edit a todo
-Story 7 - toggle completed for all todos
+[OK] Story 7 - toggle completed for all todos
 Story 8 - see footer with items left
 Story 9 - filter todos according to completion status
 Story 10 - clear all completed todos

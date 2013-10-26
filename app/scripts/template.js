@@ -24,16 +24,16 @@ app.AppView = Backbone.View.extend({
   events: {
     // 'keypress #new-todo': 'createOnEnter',
     'click #clear-completed': 'clearCompleted',
-    'click #toggle-all': 'toggleAllComplete'
+    // 'click #toggle-all': 'toggleAllComplete'
   },
 
   initialize: function() {
-    this.allCheckbox = this.$('#toggle-all')[0];
+    // this.allCheckbox = this.$('#toggle-all')[0];
     this.$input = this.$('#new-todo');
     this.$footer = this.$('#footer');
     this.$main = this.$('#main');
     // this.listenTo(app.Todos, 'add', this.addOne);
-    this.listenTo(app.Todos, 'reset', this.addAll);
+    // this.listenTo(app.Todos, 'reset', this.addAll);
     this.listenTo(app.Todos, 'change:completed', this.filterOne);
     this.listenTo(app.Todos,'filter', this.filterAll);
     this.listenTo(app.Todos, 'all', this.render);
@@ -58,7 +58,7 @@ app.AppView = Backbone.View.extend({
       this.$main.hide();
       this.$footer.hide();
     }
-    this.allCheckbox.checked = !remaining;
+    // this.allCheckbox.checked = !remaining;
   },
 
   // addOne: function(todo) {
@@ -66,10 +66,10 @@ app.AppView = Backbone.View.extend({
   //   this.$('#todo-list').append( view.render().el );
   // },
 
-  addAll: function() {
-    this.$('#todo-list').html('');
-    app.Todos.each(this.addOne, this);
-  },
+  // addAll: function() {
+  //   this.$('#todo-list').html('');
+  //   app.Todos.each(this.addOne, this);
+  // },
 
   filterOne : function (todo) {
     todo.trigger('visible');
@@ -101,14 +101,14 @@ app.AppView = Backbone.View.extend({
     return false;
   },
 
-  toggleAllComplete: function() {
-    var completed = this.allCheckbox.checked;
-    app.Todos.each(function( todo ) {
-      todo.save({
-        'completed': completed
-      });
-    });
-  }
+  // toggleAllComplete: function() {
+  //   var completed = this.allCheckbox.checked;
+  //   app.Todos.each(function( todo ) {
+  //     todo.save({
+  //       'completed': completed
+  //     });
+  //   });
+  // }
 });
 
 // app.Todo = Backbone.Model.extend({
@@ -202,9 +202,9 @@ app.TodoList = Backbone.Collection.extend({
     });
   },
 
-  remaining: function() {
-    return this.without.apply( this, this.completed() );
-  },
+  // remaining: function() {
+  //   return this.without.apply( this, this.completed() );
+  // },
 
   nextOrder: function() {
     if ( !this.length ) {
