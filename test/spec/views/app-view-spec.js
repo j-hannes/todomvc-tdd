@@ -260,6 +260,11 @@ define([
       });
 
       it('shows #main and #footer when more than one todo', function() {
+        var todos = new TodoCollection([new TodoModel()]);
+        var view = new AppView({collection: todos});
+        view.render();
+        expect(view.$('#main')).toHaveCss({display: 'block'});
+        expect(view.$('#footer')).toHaveCss({display: 'block'});
       });
     });
 
