@@ -19,12 +19,18 @@ define([
     initialize: function() {
       if (this.collection) {
         this.listenTo(this.collection, 'add', this.addOne);
+        this.listenTo(this.collection, 'add', this.renderStats);
+        this.listenTo(this.collection, 'remove', this.renderStats);
+        this.listenTo(this.collection, 'change:completed', this.renderStats);
       }
     },
 
     render: function() {
       this.$el.append(this.template());
       return this;
+    },
+
+    renderStats: function() {
     },
 
     createOnEnter: function(e) {

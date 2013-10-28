@@ -35,7 +35,7 @@ define([
       });
     });
 
-    describe('event', function() {
+    describe('DOM event', function() {
       beforeEach(function() {
         $('body').prepend($('<div id="app"></div>'));
       });
@@ -67,18 +67,45 @@ define([
           testDomEventHandling('click', '#toggle-all', 'toggleAllComplete');
         });
       });
+    });
 
-      describe('"add" on this.collection', function() {
+    describe('collection event', function() {
+      beforeEach(function() {
+        this.view = new AppView({collection: new Backbone.Collection()});
+        this.view.render();
+      });
+
+      describe('add', function() {
         it('calls addOne', function() {
-          var view = new AppView({collection: new Backbone.Collection()});
-          view.render();
-          spyOn(view, 'addOne');
-          // events must be bound to the spy
-          view.initialize();
+          spyOn(this.view, 'addOne');
+          this.view.initialize();
+          this.view.collection.trigger('add', new TodoModel());
+          expect(this.view.addOne).toHaveBeenCalled();
+        });
 
-          view.collection.trigger('add', new TodoModel());
+        it('calls renderStats', function() {
+          spyOn(this.view, 'renderStats');
+          this.view.initialize();
+          this.view.collection.trigger('add');
+          expect(this.view.renderStats).toHaveBeenCalled();
+        });
+      });
 
-          expect(view.addOne).toHaveBeenCalled();
+      describe('remove', function() {
+        it('calls renderStats', function() {
+          spyOn(this.view, 'renderStats');
+          this.view.initialize();
+          this.view.collection.trigger('remove');
+          expect(this.view.renderStats).toHaveBeenCalled();
+        });
+      });
+
+      describe('change:completed', function() {
+        it('calls renderStats', function() {
+          spyOn(this.view, 'renderStats');
+          this.view.initialize();
+          this.view.collection.trigger('change:completed');
+          expect(this.view.renderStats).toHaveBeenCalled();
         });
       });
     });
