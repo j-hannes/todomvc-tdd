@@ -4,8 +4,9 @@ define([
   'backbone',
   'models/todo-model',
   'views/todo-view',
+  'views/stats-view',
   'templates'
-], function(Backbone, Todo, TodoView, JST) {
+], function(Backbone, Todo, TodoView, StatsView, JST) {
   'use strict';
 
   var AppView = Backbone.View.extend({
@@ -31,6 +32,10 @@ define([
     },
 
     renderStats: function() {
+      if (this.statsView === undefined) {
+        this.statsView = new StatsView({collection: this.collection});
+      }
+      this.statsView.render();
     },
 
     createOnEnter: function(e) {

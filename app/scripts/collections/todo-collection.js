@@ -16,6 +16,12 @@ define([
       return this.filter(function(todo) {
         return todo.get('completed') === false;
       });
+    },
+
+    completed: function() {
+      return this.filter(function(todo) {
+        return todo.get('completed') === true;
+      });
     }
   });
 

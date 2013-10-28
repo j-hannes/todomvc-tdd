@@ -5,11 +5,13 @@ define([
   'underscore',
   'jasmine',
   'views/app-view',
+  'views/stats-view',
   'models/todo-model',
   'collections/todo-collection',
   'backbone',
   'jasmineJquery'
-], function($, _, jasmine, AppView, TodoModel, TodoCollection, Backbone) {
+], function($, _, jasmine, AppView, StatsView, TodoModel, TodoCollection,
+            Backbone) {
   'use strict';
 
   describe('View :: App', function() {
@@ -71,7 +73,7 @@ define([
 
     describe('collection event', function() {
       beforeEach(function() {
-        this.view = new AppView({collection: new Backbone.Collection()});
+        this.view = new AppView({collection: new TodoCollection()});
         this.view.render();
       });
 
@@ -241,6 +243,31 @@ define([
           expect(this.todo1.save).toHaveBeenCalledWith({completed: false});
           expect(this.todo2.save).toHaveBeenCalledWith({completed: false});
         });
+      });
+    });
+
+    describe('renderStats', function() {
+      it('instanciates a StatsView if there is none', function() {
+        var view = new AppView();
+        view.statsView = undefined;
+        view.renderStats();
+        expect(view.statsView instanceof StatsView).toBe(true);
+      });
+
+      it('does not instanciates a new StatsView if there is one', function() {
+        var view = new AppView();
+        var mock = {render: function() {}};
+        view.statsView = mock;
+        view.renderStats();
+        expect(view.statsView).toBe(mock);
+      });
+
+      it('calls render() on the stats view', function() {
+        var view = new AppView();
+        view.statsView = {render: function() {}};
+        spyOn(view.statsView, 'render');
+        view.renderStats();
+        expect(view.statsView.render).toHaveBeenCalled();
       });
     });
   });

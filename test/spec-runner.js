@@ -71,6 +71,7 @@ require([
   specs.push('spec/routers/todo-app-spec');
   specs.push('spec/views/app-view-spec');
   specs.push('spec/views/todo-view-spec');
+  specs.push('spec/views/stats-view-spec');
 
   $(function(){
     require(specs, function(){
