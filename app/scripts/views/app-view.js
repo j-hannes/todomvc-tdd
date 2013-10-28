@@ -2,10 +2,11 @@
 
 define([
   'backbone',
-  'models/todo-model',
+  'collections/todo-collection',
   'views/todo-view',
+  'views/stats-view',
   'templates'
-], function(Backbone, Todo, TodoView, JST) {
+], function(Backbone, TodoCollection, TodoView, StatsView, JST) {
   'use strict';
 
   var AppView = Backbone.View.extend({
@@ -17,14 +18,36 @@ define([
     },
 
     initialize: function() {
-      if (this.collection) {
-        this.listenTo(this.collection, 'add', this.addOne);
+      if (!this.collection) {
+        this.collection = new TodoCollection();
       }
+
+      this.listenTo(this.collection, 'add', this.addOne);
+      this.listenTo(this.collection, 'add', this.updateView);
+      this.listenTo(this.collection, 'remove', this.updateView);
+      this.listenTo(this.collection, 'change:completed', this.updateView);
     },
 
     render: function() {
-      this.$el.append(this.template());
+      this.$el.html(this.template());
+      this.updateView();
       return this;
+    },
+
+    updateView: function() {
+      if (this.collection.length > 0) {
+        this.$('#main, #footer').show();
+        this.renderStats();
+      } else {
+        this.$('#main, #footer').hide();
+      }
+    },
+
+    renderStats: function() {
+      if (this.statsView === undefined) {
+        this.statsView = new StatsView({collection: this.collection});
+      }
+      this.statsView.render();
     },
 
     createOnEnter: function(e) {

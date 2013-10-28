@@ -5,11 +5,11 @@ define([
   'underscore',
   'jasmine',
   'views/app-view',
+  'views/stats-view',
   'models/todo-model',
   'collections/todo-collection',
-  'backbone',
   'jasmineJquery'
-], function($, _, jasmine, AppView, TodoModel, TodoCollection, Backbone) {
+], function($, _, jasmine, AppView, StatsView, TodoModel, TodoCollection) {
   'use strict';
 
   describe('View :: App', function() {
@@ -33,9 +33,16 @@ define([
       it('returns the view', function() {
         expect(this.view.render()).toBe(this.view);
       });
+
+      it('calls updateView()', function() {
+        spyOn(this.view, 'updateView');
+        this.view.render();
+        expect(this.view.updateView).toHaveBeenCalled();
+      });
+
     });
 
-    describe('event', function() {
+    describe('DOM event', function() {
       beforeEach(function() {
         $('body').prepend($('<div id="app"></div>'));
       });
@@ -67,18 +74,45 @@ define([
           testDomEventHandling('click', '#toggle-all', 'toggleAllComplete');
         });
       });
+    });
 
-      describe('"add" on this.collection', function() {
+    describe('collection event', function() {
+      beforeEach(function() {
+        this.view = new AppView({collection: new TodoCollection()});
+        this.view.render();
+      });
+
+      describe('add', function() {
         it('calls addOne', function() {
-          var view = new AppView({collection: new Backbone.Collection()});
-          view.render();
-          spyOn(view, 'addOne');
-          // events must be bound to the spy
-          view.initialize();
+          spyOn(this.view, 'addOne');
+          this.view.initialize();
+          this.view.collection.trigger('add', new TodoModel());
+          expect(this.view.addOne).toHaveBeenCalled();
+        });
 
-          view.collection.trigger('add', new TodoModel());
+        it('calls updateView', function() {
+          spyOn(this.view, 'updateView');
+          this.view.initialize();
+          this.view.collection.trigger('add');
+          expect(this.view.updateView).toHaveBeenCalled();
+        });
+      });
 
-          expect(view.addOne).toHaveBeenCalled();
+      describe('remove', function() {
+        it('calls updateView', function() {
+          spyOn(this.view, 'updateView');
+          this.view.initialize();
+          this.view.collection.trigger('remove');
+          expect(this.view.updateView).toHaveBeenCalled();
+        });
+      });
+
+      describe('change:completed', function() {
+        it('calls updateView', function() {
+          spyOn(this.view, 'updateView');
+          this.view.initialize();
+          this.view.collection.trigger('change:completed');
+          expect(this.view.updateView).toHaveBeenCalled();
         });
       });
     });
@@ -214,6 +248,43 @@ define([
           expect(this.todo1.save).toHaveBeenCalledWith({completed: false});
           expect(this.todo2.save).toHaveBeenCalledWith({completed: false});
         });
+      });
+    });
+
+    describe('updateView', function() {
+      it('hides #main and #footer when no todos', function() {
+        var view = new AppView();
+        view.render();
+        expect(view.$('#main')).toHaveCss({display: 'none'});
+        expect(view.$('#footer')).toHaveCss({display: 'none'});
+      });
+
+      it('shows #main and #footer when more than one todo', function() {
+      });
+    });
+
+    describe('renderStats', function() {
+      it('instanciates a StatsView if there is none', function() {
+        var view = new AppView();
+        view.statsView = undefined;
+        view.renderStats();
+        expect(view.statsView instanceof StatsView).toBe(true);
+      });
+
+      it('does not instanciates a new StatsView if there is one', function() {
+        var view = new AppView();
+        var mock = {render: function() {}};
+        view.statsView = mock;
+        view.renderStats();
+        expect(view.statsView).toBe(mock);
+      });
+
+      it('calls render() on the stats view', function() {
+        var view = new AppView();
+        view.statsView = {render: function() {}};
+        spyOn(view.statsView, 'render');
+        view.renderStats();
+        expect(view.statsView.render).toHaveBeenCalled();
       });
     });
   });

@@ -29,35 +29,35 @@ app.AppView = Backbone.View.extend({
 
   initialize: function() {
     // this.allCheckbox = this.$('#toggle-all')[0];
-    this.$input = this.$('#new-todo');
-    this.$footer = this.$('#footer');
-    this.$main = this.$('#main');
+    // this.$input = this.$('#new-todo');
+    // this.$footer = this.$('#footer');
+    // this.$main = this.$('#main');
     // this.listenTo(app.Todos, 'add', this.addOne);
     // this.listenTo(app.Todos, 'reset', this.addAll);
     this.listenTo(app.Todos, 'change:completed', this.filterOne);
     this.listenTo(app.Todos,'filter', this.filterAll);
-    this.listenTo(app.Todos, 'all', this.render);
+    // this.listenTo(app.Todos, 'all', this.render);
     // app.Todos.fetch();
   },
 
   render: function() {
-    var completed = app.Todos.completed().length;
-    var remaining = app.Todos.remaining().length;
-    if ( app.Todos.length ) {
-      this.$main.show();
-      this.$footer.show();
-      this.$footer.html(this.statsTemplate({
-        completed: completed,
-        remaining: remaining
-      }));
+    // var completed = app.Todos.completed().length;
+    // var remaining = app.Todos.remaining().length;
+    // if ( app.Todos.length ) {
+    //   this.$main.show();
+    //   this.$footer.show();
+      // this.$footer.html(this.statsTemplate({
+      //   completed: completed,
+      //   remaining: remaining
+      // }));
       this.$('#filters li a')
         .removeClass('selected')
         .filter('[href="#/' + ( app.TodoFilter || '' ) + '"]')
         .addClass('selected');
-    } else {
-      this.$main.hide();
-      this.$footer.hide();
-    }
+    // } else {
+    //   this.$main.hide();
+    //   this.$footer.hide();
+    // }
     // this.allCheckbox.checked = !remaining;
   },
 
@@ -192,28 +192,28 @@ app.TodoView = Backbone.View.extend({
   // }
 });
 
-app.TodoList = Backbone.Collection.extend({
-  // model: app.Todo,
-  // localStorage: new Backbone.LocalStorage('todos-backbone'),
+// app.TodoList = Backbone.Collection.extend({
+//   // model: app.Todo,
+//   // localStorage: new Backbone.LocalStorage('todos-backbone'),
 
-  completed: function() {
-    return this.filter(function( todo ) {
-      return todo.get('completed');
-    });
-  },
+//   // completed: function() {
+//   //   return this.filter(function( todo ) {
+//   //     return todo.get('completed');
+//   //   });
+//   // },
 
-  // remaining: function() {
-  //   return this.without.apply( this, this.completed() );
-  // },
+//   // remaining: function() {
+//   //   return this.without.apply( this, this.completed() );
+//   // },
 
-  nextOrder: function() {
-    if ( !this.length ) {
-      return 1;
-    }
-    return this.last().get('order') + 1;
-  },
+//   // nextOrder: function() {
+//   //   if ( !this.length ) {
+//   //     return 1;
+//   //   }
+//   //   return this.last().get('order') + 1;
+//   // },
 
-  comparator: function( todo ) {
-    return todo.get('order');
-  }
-});
+//   // comparator: function( todo ) {
+//   //   return todo.get('order');
+//   // }
+// });

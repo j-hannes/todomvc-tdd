@@ -32,5 +32,19 @@ define([
         expect(remaining).toEqual([todo1, todo3]);
       });
     });
+
+    describe('completed', function() {
+      it('returns all completed todo models', function() {
+        // preparation
+        var todo1 = new TodoModel({completed: false});
+        var todo2 = new TodoModel({completed: true});
+        var todo3 = new TodoModel({completed: false});
+        var todos = new TodoCollection([todo1, todo2, todo3]);
+        // execution
+        var completed = todos.completed();
+        // check
+        expect(completed).toEqual([todo2]);
+      });
+    });
   });
 });
