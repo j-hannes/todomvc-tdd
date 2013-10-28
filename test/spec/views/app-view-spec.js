@@ -252,19 +252,38 @@ define([
     });
 
     describe('updateView', function() {
-      it('hides #main and #footer when no todos', function() {
-        var view = new AppView();
-        view.render();
-        expect(view.$('#main')).toHaveCss({display: 'none'});
-        expect(view.$('#footer')).toHaveCss({display: 'none'});
+      describe('when no todos', function() {
+        it('hides #main and #footer', function() {
+          var view = new AppView();
+          view.render();
+          expect(view.$('#main')).toHaveCss({display: 'none'});
+          expect(view.$('#footer')).toHaveCss({display: 'none'});
+        });
+
+        it('does not call renderStats()', function() {
+          var view = new AppView();
+          spyOn(view, 'renderStats');
+          view.updateView();
+          expect(view.renderStats).not.toHaveBeenCalled();
+        });
       });
 
-      it('shows #main and #footer when more than one todo', function() {
-        var todos = new TodoCollection([new TodoModel()]);
-        var view = new AppView({collection: todos});
-        view.render();
-        expect(view.$('#main')).toHaveCss({display: 'block'});
-        expect(view.$('#footer')).toHaveCss({display: 'block'});
+      describe('when one or more todos', function() {
+        it('shows #main and #footer', function() {
+          var todos = new TodoCollection([new TodoModel()]);
+          var view = new AppView({collection: todos});
+          view.render();
+          expect(view.$('#main')).toHaveCss({display: 'block'});
+          expect(view.$('#footer')).toHaveCss({display: 'block'});
+        });
+
+        it('calls renderStats()', function() {
+          var todos = new TodoCollection([new TodoModel()]);
+          var view = new AppView({collection: todos});
+          spyOn(view, 'renderStats');
+          view.updateView();
+          expect(view.renderStats).toHaveBeenCalled();
+        });
       });
     });
 
